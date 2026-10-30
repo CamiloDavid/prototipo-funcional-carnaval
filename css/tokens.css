@@ -1,0 +1,57 @@
+@font-face { font-family: "Inter"; font-weight: 400; font-display: swap; src: url("../assets/fonts/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; font-display: swap; src: url("../assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; font-display: swap; src: url("../assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; font-display: swap; src: url("../assets/fonts/inter-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 800; font-display: swap; src: url("../assets/fonts/inter-latin-800-normal.woff2") format("woff2"); }
+
+:root {
+  /* Paleta de la Fase 3 */
+  --rojo: #D7263D;
+  --amarillo: #F7B801;
+  --azul: #008EC4;
+  --verde: #2EAD68;
+  --fondo: #FFFCF5;
+
+  /* Tonos derivados */
+  --rojo-suave: #FBE3E6;
+  --amarillo-suave: #FEF3CC;
+  --azul-suave: #DDF1F9;
+  --verde-suave: #DDF3E7;
+  --gris-suave: #EFEDE8;
+
+  --tinta: #1F1A17;
+  --tinta-2: #5A534D;
+  --tinta-3: #8C857E;
+  --borde: #E7E1D6;
+  --superficie: #FFFFFF;
+
+  /* Tipografía (escala base 16 px; --escala la cambia Ajustes, HU-07) */
+  --escala: 1;
+  --fuente: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --t-xs: calc(12px * var(--escala));
+  --t-sm: calc(14px * var(--escala));
+  --t-md: calc(16px * var(--escala));
+  --t-lg: calc(18px * var(--escala));
+  --t-xl: calc(22px * var(--escala));
+  --t-2xl: calc(28px * var(--escala));
+
+  /* Espacios, radios y sombras */
+  --e-1: 4px; --e-2: 8px; --e-3: 12px; --e-4: 16px; --e-5: 20px; --e-6: 24px; --e-8: 32px;
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 24px; --r-full: 999px;
+  --sombra-1: 0 1px 2px rgba(31, 26, 23, .06), 0 1px 3px rgba(31, 26, 23, .08);
+  --sombra-2: 0 4px 12px rgba(31, 26, 23, .10);
+
+  --alto-nav: 68px;
+}
+
+/* Contraste alto (HU-07) */
+:root[data-contraste="alto"] {
+  --fondo: #FFFFFF;
+  --tinta: #000000;
+  --tinta-2: #1F1A17;
+  --tinta-3: #3D3833;
+  --borde: #1F1A17;
+  --rojo: #B0102A;
+  --azul: #00628A;
+  --verde: #1C7A47;
+}
