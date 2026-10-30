@@ -3,107 +3,1155 @@
   "version": "2026.1",
   "actualizado": "2026-10-30T09:00:00-05:00",
   "lema": "Hecho con el Alma",
-  "fuente": "Programación oficial publicada por la Alcaldía de Pasto y Corpocarnaval (edición 2026)",
+  "fuente": "Programación oficial 2025-2026 de Corpocarnaval (hoja de programación y line up de carnavaldepasto.org, consultada el 9 de octubre de 2026)",
   "dias": [
-    { "fecha": "2025-12-28", "etiqueta": "28 dic", "dia": "Dom", "jornada": "precarnaval" },
-    { "fecha": "2025-12-29", "etiqueta": "29 dic", "dia": "Lun", "jornada": "precarnaval" },
-    { "fecha": "2025-12-30", "etiqueta": "30 dic", "dia": "Mar", "jornada": "precarnaval" },
-    { "fecha": "2025-12-31", "etiqueta": "31 dic", "dia": "Mié", "jornada": "precarnaval" },
-    { "fecha": "2026-01-01", "etiqueta": "1 ene", "dia": "Jue", "jornada": null },
-    { "fecha": "2026-01-02", "etiqueta": "2 ene", "dia": "Vie", "jornada": "carnavalito" },
-    { "fecha": "2026-01-03", "etiqueta": "3 ene", "dia": "Sáb", "jornada": "canto-a-la-tierra" },
-    { "fecha": "2026-01-04", "etiqueta": "4 ene", "dia": "Dom", "jornada": "familia-castaneda" },
-    { "fecha": "2026-01-05", "etiqueta": "5 ene", "dia": "Lun", "jornada": "dia-de-negros" },
-    { "fecha": "2026-01-06", "etiqueta": "6 ene", "dia": "Mar", "jornada": "dia-de-blancos" },
-    { "fecha": "2026-01-07", "etiqueta": "7 ene", "dia": "Mié", "jornada": "cierre-campesino" }
+    {
+      "fecha": "2025-12-28",
+      "etiqueta": "28 dic",
+      "dia": "Dom",
+      "jornada": "precarnaval"
+    },
+    {
+      "fecha": "2025-12-29",
+      "etiqueta": "29 dic",
+      "dia": "Lun",
+      "jornada": "precarnaval"
+    },
+    {
+      "fecha": "2025-12-30",
+      "etiqueta": "30 dic",
+      "dia": "Mar",
+      "jornada": "precarnaval"
+    },
+    {
+      "fecha": "2025-12-31",
+      "etiqueta": "31 dic",
+      "dia": "Mié",
+      "jornada": "precarnaval"
+    },
+    {
+      "fecha": "2026-01-01",
+      "etiqueta": "1 ene",
+      "dia": "Jue",
+      "jornada": null
+    },
+    {
+      "fecha": "2026-01-02",
+      "etiqueta": "2 ene",
+      "dia": "Vie",
+      "jornada": "carnavalito"
+    },
+    {
+      "fecha": "2026-01-03",
+      "etiqueta": "3 ene",
+      "dia": "Sáb",
+      "jornada": "canto-a-la-tierra"
+    },
+    {
+      "fecha": "2026-01-04",
+      "etiqueta": "4 ene",
+      "dia": "Dom",
+      "jornada": "familia-castaneda"
+    },
+    {
+      "fecha": "2026-01-05",
+      "etiqueta": "5 ene",
+      "dia": "Lun",
+      "jornada": "dia-de-negros"
+    },
+    {
+      "fecha": "2026-01-06",
+      "etiqueta": "6 ene",
+      "dia": "Mar",
+      "jornada": "dia-de-blancos"
+    },
+    {
+      "fecha": "2026-01-07",
+      "etiqueta": "7 ene",
+      "dia": "Mié",
+      "jornada": "cierre-campesino"
+    }
   ],
   "categorias": [
-    { "id": "desfile", "nombre": "Desfile", "color": "rojo" },
-    { "id": "musica", "nombre": "Música", "color": "azul" },
-    { "id": "danza", "nombre": "Danza", "color": "amarillo" },
-    { "id": "tradicion", "nombre": "Tradición", "color": "verde" },
-    { "id": "recreacion", "nombre": "Recreación", "color": "gris" }
+    {
+      "id": "desfile",
+      "nombre": "Desfile",
+      "color": "rojo"
+    },
+    {
+      "id": "musica",
+      "nombre": "Música",
+      "color": "azul"
+    },
+    {
+      "id": "danza",
+      "nombre": "Danza",
+      "color": "amarillo"
+    },
+    {
+      "id": "tradicion",
+      "nombre": "Tradición",
+      "color": "verde"
+    },
+    {
+      "id": "recreacion",
+      "nombre": "Recreación",
+      "color": "gris"
+    }
   ],
   "lugares": [
-    { "id": "senda", "nombre": "Senda del Carnaval", "direccion": "Carrera 27 – Calle 19 – Calle 18 hasta el Estadio Libertad", "filtro": "senda" },
-    { "id": "plaza-carnaval", "nombre": "Plaza del Carnaval", "direccion": "Centro de Pasto", "filtro": "plaza-carnaval" },
-    { "id": "plaza-narino", "nombre": "Plaza de Nariño", "direccion": "Centro de Pasto", "filtro": "plaza-narino" },
-    { "id": "concha-acustica", "nombre": "Concha Acústica Agustín Agualongo", "direccion": "Pasto", "filtro": "otros" },
-    { "id": "templo-merced", "nombre": "Templo de la Merced", "direccion": "Centro de Pasto", "filtro": "otros" },
-    { "id": "plazoleta-san-felipe", "nombre": "Plazoleta de San Felipe", "direccion": "Centro de Pasto", "filtro": "otros" },
-    { "id": "coliseo-barrio-obrero", "nombre": "Coliseo Barrio Obrero", "direccion": "Barrio Obrero, Pasto", "filtro": "otros" },
-    { "id": "el-colorado", "nombre": "Sector El Colorado", "direccion": "Sector El Colorado y calles aledañas", "filtro": "otros" },
-    { "id": "comunas", "nombre": "Comunas de la ciudad", "direccion": "Barrios de Pasto", "filtro": "otros" },
-    { "id": "corregimientos", "nombre": "Corregimientos de Pasto", "direccion": "Zona rural del municipio", "filtro": "otros" },
-    { "id": "estadio-libertad", "nombre": "Estadio Departamental Libertad", "direccion": "Final de la Senda del Carnaval", "filtro": "otros" },
-    { "id": "rumipamba", "nombre": "Parque Ambiental Rumipamba", "direccion": "Pasto", "filtro": "otros" },
-    { "id": "inem", "nombre": "I.E.M. INEM Luis Delfín Insuasty Rodríguez", "direccion": "Pasto", "filtro": "otros" },
-    { "id": "capusigra", "nombre": "Sector Capusigra", "direccion": "Pasto", "filtro": "otros" },
-    { "id": "av-alfonso-zambrano", "nombre": "Avenida Alfonso Zambrano", "direccion": "Pasto", "filtro": "otros" }
+    {
+      "id": "senda",
+      "nombre": "Senda del Carnaval",
+      "direccion": "Carrera 27 – Calle 19 – Calle 18 hasta el Estadio Libertad",
+      "filtro": "senda",
+      "lat": 1.2175,
+      "lon": -77.2827
+    },
+    {
+      "id": "plaza-carnaval",
+      "nombre": "Plaza del Carnaval",
+      "direccion": "Centro de Pasto",
+      "filtro": "plaza-carnaval",
+      "lat": 1.2096,
+      "lon": -77.2779
+    },
+    {
+      "id": "plaza-narino",
+      "nombre": "Plaza de Nariño",
+      "direccion": "Centro de Pasto",
+      "filtro": "plaza-narino",
+      "lat": 1.2142,
+      "lon": -77.2786
+    },
+    {
+      "id": "concha-acustica",
+      "nombre": "Concha Acústica Agustín Agualongo",
+      "direccion": "Pasto",
+      "filtro": "otros",
+      "lat": 1.2102,
+      "lon": -77.2813
+    },
+    {
+      "id": "templo-merced",
+      "nombre": "Templo de la Merced",
+      "direccion": "Centro de Pasto",
+      "filtro": "otros",
+      "lat": 1.2148,
+      "lon": -77.2799
+    },
+    {
+      "id": "plazoleta-san-felipe",
+      "nombre": "Plazoleta de San Felipe",
+      "direccion": "Centro de Pasto",
+      "filtro": "otros",
+      "lat": 1.2161,
+      "lon": -77.2808
+    },
+    {
+      "id": "el-colorado",
+      "nombre": "Sector El Colorado",
+      "direccion": "Sector El Colorado y calles aledañas",
+      "filtro": "otros"
+    },
+    {
+      "id": "comunas",
+      "nombre": "Comunas de la ciudad",
+      "direccion": "Barrios de Pasto",
+      "filtro": "otros"
+    },
+    {
+      "id": "corregimientos",
+      "nombre": "Corregimientos de Pasto",
+      "direccion": "Zona rural del municipio",
+      "filtro": "otros"
+    },
+    {
+      "id": "estadio-libertad",
+      "nombre": "Estadio Departamental Libertad",
+      "direccion": "Final de la Senda del Carnaval",
+      "filtro": "otros",
+      "lat": 1.1984,
+      "lon": -77.2765
+    },
+    {
+      "id": "capusigra",
+      "nombre": "Sector Capusigra",
+      "direccion": "Pasto",
+      "filtro": "otros",
+      "lat": 1.2202,
+      "lon": -77.2862
+    },
+    {
+      "id": "av-alfonso-zambrano",
+      "nombre": "Avenida Alfonso Zambrano",
+      "direccion": "Pasto",
+      "filtro": "otros",
+      "lat": 1.2056,
+      "lon": -77.2752
+    }
   ],
   "filtrosLugar": [
-    { "id": "senda", "nombre": "Senda del Carnaval" },
-    { "id": "plaza-carnaval", "nombre": "Plaza del Carnaval" },
-    { "id": "plaza-narino", "nombre": "Plaza de Nariño" },
-    { "id": "otros", "nombre": "Otros lugares" }
+    {
+      "id": "senda",
+      "nombre": "Senda del Carnaval"
+    },
+    {
+      "id": "plaza-carnaval",
+      "nombre": "Plaza del Carnaval"
+    },
+    {
+      "id": "plaza-narino",
+      "nombre": "Plaza de Nariño"
+    },
+    {
+      "id": "otros",
+      "nombre": "Otros lugares"
+    }
   ],
   "eventos": [
-    { "id": "carrera-atletica", "fecha": "2025-12-28", "hora": "06:00", "nombre": "Carrera Atlética del Carnaval", "categoria": "recreacion", "lugar": "plaza-carnaval", "descripcion": "Carrera de 15K y 10K en modalidad competitiva y 5K recreativa. Concentración a las 5:00 a. m.; salida y llegada en la Plaza del Carnaval.", "colectivos": [] },
-    { "id": "arcoiris-asfalto", "fecha": "2025-12-28", "hora": "08:00", "nombre": "Arcoíris en el Asfalto (versión 29)", "categoria": "tradicion", "lugar": "el-colorado", "descripcion": "Jornada de dibujo con tiza sobre las calles, abierta a niños, jóvenes y familias.", "colectivos": [] },
-    { "id": "vive-tu-comuna", "fecha": "2025-12-28", "hora": "08:00", "nombre": "Vive tu Comuna", "categoria": "tradicion", "lugar": "comunas", "descripcion": "Actividades artísticas y culturales del precarnaval en los barrios de la ciudad.", "colectivos": [] },
-    { "id": "vive-tu-corregimiento", "fecha": "2025-12-28", "hora": "08:00", "nombre": "Vive tu Corregimiento", "categoria": "tradicion", "lugar": "corregimientos", "descripcion": "Actividades artísticas y culturales del precarnaval en la zona rural del municipio.", "colectivos": [] },
-    { "id": "torneo-ajedrez", "fecha": "2025-12-28", "hora": "08:00", "nombre": "Torneo Abierto de Ajedrez", "categoria": "recreacion", "lugar": "coliseo-barrio-obrero", "descripcion": "Torneo abierto de ajedrez del precarnaval, de 8:00 a. m. a 5:00 p. m.", "colectivos": [] },
-    { "id": "bici-carnaval", "fecha": "2025-12-28", "hora": "10:00", "nombre": "Bici Carnaval en Familia", "categoria": "recreacion", "lugar": "plaza-carnaval", "descripcion": "Recorrido recreativo en bicicleta para familias y colectivos.", "colectivos": [] },
-    { "id": "encuentro-cantautoras", "fecha": "2025-12-28", "hora": "10:00", "nombre": "Encuentro de Cantautoras", "categoria": "musica", "lugar": "plazoleta-san-felipe", "descripcion": "Encuentro de cantautoras locales con artista invitada.", "colectivos": [] },
-    { "id": "festival-orquestas", "fecha": "2025-12-28", "hora": "14:00", "nombre": "VIII Festival de Orquestas", "categoria": "musica", "lugar": "plaza-carnaval", "descripcion": "Presentación de orquestas de 2:00 p. m. a 8:00 p. m.", "colectivos": [] },
-    { "id": "musica-romantica", "fecha": "2025-12-29", "hora": "15:00", "nombre": "Concierto de música romántica", "categoria": "musica", "lugar": "plaza-carnaval", "descripcion": "Concierto de baladas en español.", "colectivos": [] },
-    { "id": "serenata-pasto", "fecha": "2025-12-30", "hora": "15:00", "nombre": "Serenata a Pasto", "categoria": "musica", "lugar": "plaza-carnaval", "descripcion": "Serenata de música de cuerdas y romántica con artista invitado.", "colectivos": [] },
-    { "id": "anos-viejos", "fecha": "2025-12-31", "hora": "10:00", "nombre": "Desfile de Años Viejos", "categoria": "desfile", "lugar": "senda", "concentracion": "capusigra", "finalizacion": "av-alfonso-zambrano", "descripcion": "Desfile y concurso de figuras que recrean, con sátira y humor, personajes y hechos del año que termina. Al año viejo lo llora una viuda y se lee su testamento.", "colectivos": [] },
-    { "id": "autos-clasicos", "fecha": "2025-12-31", "hora": "11:00", "nombre": "Desfile de Autos Clásicos", "categoria": "desfile", "lugar": "senda", "concentracion": "capusigra", "descripcion": "Exhibición de automóviles, camionetas, jeeps y motocicletas de distintas épocas.", "colectivos": [] },
-    { "id": "ofrenda-mercedes", "fecha": "2026-01-02", "hora": "07:00", "nombre": "Ofrenda a la Virgen de las Mercedes", "categoria": "tradicion", "lugar": "templo-merced", "descripcion": "Ofrenda con la que se abren los días centrales del Carnaval.", "colectivos": [] },
-    { "id": "carnavalito", "fecha": "2026-01-02", "hora": "10:00", "nombre": "Carnavalito – 60 años de tradición", "categoria": "desfile", "lugar": "senda", "concentracion": "rumipamba", "finalizacion": "estadio-libertad", "descripcion": "Desfile infantil con murguitas, colectivos coreográficos, comparsas y minicarrocitas hechas por niñas y niños.", "colectivos": [] },
-    { "id": "rock-carnaval", "fecha": "2026-01-02", "hora": "14:00", "nombre": "Rock Carnaval", "categoria": "musica", "lugar": "plaza-narino", "descripcion": "Concierto de agrupaciones locales de rock y música alternativa con artistas invitados.", "colectivos": [] },
-    { "id": "dia-salsa", "fecha": "2026-01-02", "hora": "14:00", "nombre": "Concierto El Día de la Salsa", "categoria": "musica", "lugar": "concha-acustica", "descripcion": "Concierto de salsa.", "colectivos": [] },
-    { "id": "musica-campesina", "fecha": "2026-01-02", "hora": "14:00", "nombre": "Concierto de música campesina", "categoria": "musica", "lugar": "plaza-carnaval", "descripcion": "Agrupaciones campesinas y rurales de la región.", "colectivos": [] },
-    { "id": "canto-a-la-tierra", "fecha": "2026-01-03", "hora": "09:00", "nombre": "Canto a la Tierra", "categoria": "danza", "lugar": "senda", "concentracion": "inem", "finalizacion": "estadio-libertad", "descripcion": "Desfile de colectivos coreográficos que rinde tributo a la madre tierra con música y danza de herencia andina.", "colectivos": ["proyeccion-coral", "raza-libertad", "indioamericanto", "ayawaska", "inti-wayra", "herencia-mestiza"] },
-    { "id": "cantos-de-vida", "fecha": "2026-01-03", "hora": "15:00", "nombre": "Concierto Cantos de Vida", "categoria": "musica", "lugar": "plaza-narino", "descripcion": "Concierto de música andina con agrupaciones nacionales e internacionales.", "colectivos": [] },
-    { "id": "rumba-03", "fecha": "2026-01-03", "hora": "16:00", "nombre": "Rumba Carnavalera", "categoria": "musica", "lugar": "plaza-carnaval", "descripcion": "Orquestas y grupos bailables con artista invitado.", "colectivos": [] },
-    { "id": "familia-castaneda", "fecha": "2026-01-04", "hora": "10:00", "nombre": "Llegada de la Familia Castañeda", "categoria": "desfile", "lugar": "senda", "concentracion": "capusigra", "finalizacion": "av-alfonso-zambrano", "descripcion": "Desfile tradicional con escenas de la memoria rural y urbana de la región, en tono de humor popular.", "colectivos": [] },
-    { "id": "rumba-04-narino", "fecha": "2026-01-04", "hora": "16:00", "nombre": "Rumba Carnavalera", "categoria": "musica", "lugar": "plaza-narino", "descripcion": "Orquestas y grupos bailables con artistas invitados.", "colectivos": [] },
-    { "id": "rumba-04-carnaval", "fecha": "2026-01-04", "hora": "16:00", "nombre": "Rumba Carnavalera", "categoria": "musica", "lugar": "plaza-carnaval", "descripcion": "Orquestas y grupos bailables con artistas invitados.", "colectivos": [] },
-    { "id": "dia-de-negros", "fecha": "2026-01-05", "hora": "14:00", "nombre": "Día de Negros", "categoria": "tradicion", "lugar": "comunas", "descripcion": "Juego tradicional en el que la gente se pinta el rostro de negro con cosmético, pidiendo «una pintica, por favor».", "colectivos": [] },
-    { "id": "misma-pintica", "fecha": "2026-01-05", "hora": "14:00", "nombre": "Concierto «Todos la misma pintica»", "categoria": "musica", "lugar": "plaza-carnaval", "descripcion": "Concierto organizado por la Gobernación de Nariño.", "colectivos": [] },
-    { "id": "rumba-05", "fecha": "2026-01-05", "hora": "16:00", "nombre": "Rumba Carnavalera", "categoria": "musica", "lugar": "plaza-narino", "descripcion": "Orquestas y grupos bailables con artista invitado.", "colectivos": [] },
-    { "id": "desfile-magno", "fecha": "2026-01-06", "hora": "08:00", "nombre": "Desfile Magno", "categoria": "desfile", "lugar": "senda", "concentracion": "inem", "finalizacion": "estadio-libertad", "descripcion": "El desfile central del Día de Blancos: carrozas monumentales, comparsas, murgas y colectivos recorren la Senda del Carnaval.", "colectivos": ["indomable-mujer-guerrera", "carnaval-negros-blancos", "narino-alas-de-vida"] },
-    { "id": "rumba-06-narino", "fecha": "2026-01-06", "hora": "16:00", "nombre": "Rumba Carnavalera", "categoria": "musica", "lugar": "plaza-narino", "descripcion": "Orquestas y grupos bailables con artistas invitados.", "colectivos": [] },
-    { "id": "rumba-06-carnaval", "fecha": "2026-01-06", "hora": "16:00", "nombre": "Rumba Carnavalera", "categoria": "musica", "lugar": "plaza-carnaval", "descripcion": "Orquestas y grupos bailables con artistas invitados.", "colectivos": [] },
-    { "id": "festival-cuy", "fecha": "2026-01-07", "hora": null, "nombre": "Festival del Cuy y la Cultura Campesina", "categoria": "tradicion", "lugar": "corregimientos", "descripcion": "Gastronomía y cultura campesina en los corregimientos de La Laguna, Catambuco, Obonuco y Genoy. Organiza la Secretaría de Agricultura Municipal.", "colectivos": [] }
+    {
+      "id": "carrera-atletica-del-carnaval",
+      "fecha": "2025-12-28",
+      "hora": "05:00",
+      "nombre": "Carrera Atlética del Carnaval",
+      "categoria": "recreacion",
+      "lugar": "plaza-carnaval",
+      "concentracion": "Plaza del Carnaval",
+      "finalizacion": "Plaza del Carnaval",
+      "descripcion": "Carrera de 15K y 10K en modalidad competitiva y 5K recreativa. Concentración a las 5:00 a. m.; salida y llegada en la Plaza del Carnaval.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "arcoiris-en-el-asfalto-version-29",
+      "fecha": "2025-12-28",
+      "hora": "08:00",
+      "horaFin": "22:00",
+      "nombre": "Arcoíris en el Asfalto, versión 29",
+      "categoria": "recreacion",
+      "lugar": "el-colorado",
+      "descripcion": "«Agua que nace, territorio que florece». Esquinas de danza, palabra, teatro y hip hop, y feria de emprendimientos y arte efímero. Organiza la Fundación Cultural Vía Libre.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "vive-tu-comuna",
+      "fecha": "2025-12-28",
+      "hora": "08:00",
+      "horaFin": "16:00",
+      "nombre": "Vive tu Comuna",
+      "categoria": "tradicion",
+      "lugar": "comunas",
+      "descripcion": "Actividades artísticas y culturales del precarnaval en los barrios de la ciudad.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "vive-tu-corregimiento",
+      "fecha": "2025-12-28",
+      "hora": "08:00",
+      "horaFin": "16:00",
+      "nombre": "Vive tu Corregimiento",
+      "categoria": "tradicion",
+      "lugar": "corregimientos",
+      "descripcion": "Actividades artísticas y culturales del precarnaval en la zona rural del municipio.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "bici-carnaval-en-familia",
+      "fecha": "2025-12-28",
+      "hora": "10:00",
+      "nombre": "Bici Carnaval en Familia",
+      "categoria": "recreacion",
+      "lugar": "plaza-carnaval",
+      "descripcion": "Recorrido recreativo en bicicleta para familias y colectivos.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "encuentro-de-cantautoras",
+      "fecha": "2025-12-28",
+      "hora": "10:00",
+      "nombre": "Encuentro de Cantautoras",
+      "categoria": "musica",
+      "lugar": "plazoleta-san-felipe",
+      "descripcion": "Encuentro de cantautoras locales con artista invitada.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Cantautoras locales",
+          "cantidad": 7
+        }
+      ]
+    },
+    {
+      "id": "8-o-festival-de-orquestas",
+      "fecha": "2025-12-28",
+      "hora": "15:00",
+      "horaFin": "23:00",
+      "nombre": "8.º Festival de Orquestas",
+      "categoria": "musica",
+      "lugar": "plaza-carnaval",
+      "descripcion": "Doce orquestas de la ciudad se turnan en la tarima de la Plaza del Carnaval. Organiza ASORPAS.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Afroonda Orquesta",
+          "tipo": "Orquesta"
+        },
+        {
+          "nombre": "Orquesta Femenina Oxígeno",
+          "tipo": "Orquesta"
+        },
+        {
+          "nombre": "Makao Orquesta",
+          "tipo": "Orquesta"
+        },
+        {
+          "nombre": "Yambeque Orquesta",
+          "tipo": "Orquesta"
+        },
+        {
+          "nombre": "Orquesta La Sinceridad",
+          "tipo": "Orquesta"
+        },
+        {
+          "nombre": "Orquesta Clase Aparte",
+          "tipo": "Orquesta"
+        },
+        {
+          "nombre": "Wilson y sus Estrellas",
+          "tipo": "Orquesta"
+        },
+        {
+          "nombre": "Orquesta Calle Nuestra",
+          "tipo": "Orquesta"
+        },
+        {
+          "nombre": "Orquesta Cañaveral",
+          "tipo": "Orquesta"
+        },
+        {
+          "nombre": "Adrián Bravo y su Orquesta",
+          "tipo": "Orquesta"
+        },
+        {
+          "nombre": "Tropical Internacional Orquesta",
+          "tipo": "Orquesta"
+        },
+        {
+          "nombre": "Orquesta Femenina Son Kaney",
+          "tipo": "Orquesta"
+        }
+      ]
+    },
+    {
+      "id": "concierto-de-musica-romantica",
+      "fecha": "2025-12-29",
+      "hora": "15:00",
+      "nombre": "Concierto de música romántica",
+      "categoria": "musica",
+      "lugar": "plaza-carnaval",
+      "descripcion": "Concierto de baladas en español.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Grupo Romántico Candilejas",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Grupo Ébano El Original",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Grupo Zafiro El Más Romántico",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Grupo Caravana",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Grupo Matiz Romántico",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Grupo Yesterday",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Grupo Época",
+          "tipo": "Grupo"
+        }
+      ]
+    },
+    {
+      "id": "serenata-a-pasto",
+      "fecha": "2025-12-30",
+      "hora": "15:00",
+      "nombre": "Serenata a Pasto",
+      "categoria": "musica",
+      "lugar": "plaza-carnaval",
+      "descripcion": "Serenata de música de cuerdas y romántica con artista invitado.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Trío Abedul",
+          "tipo": "Trío"
+        },
+        {
+          "nombre": "Anhelos Trío",
+          "tipo": "Trío"
+        },
+        {
+          "nombre": "Instantes Trío",
+          "tipo": "Trío"
+        },
+        {
+          "nombre": "Media Noche Trío",
+          "tipo": "Trío"
+        },
+        {
+          "nombre": "Cadenza Trío",
+          "tipo": "Trío"
+        },
+        {
+          "nombre": "Trío Manantial",
+          "tipo": "Trío"
+        },
+        {
+          "nombre": "Trío Cantoral de Colombia",
+          "tipo": "Trío"
+        }
+      ]
+    },
+    {
+      "id": "desfile-de-anos-viejos",
+      "fecha": "2025-12-31",
+      "hora": "10:00",
+      "nombre": "Desfile de Años Viejos",
+      "categoria": "desfile",
+      "lugar": "senda",
+      "concentracion": "Sector Capusigra",
+      "finalizacion": "Av. Alfonso Zambrano",
+      "descripcion": "Desfile y concurso de figuras que recrean, con sátira y humor, personajes y hechos del año que termina. Al año viejo lo llora una viuda y se lee su testamento.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "desfile-de-autos-clasicos",
+      "fecha": "2025-12-31",
+      "hora": "11:00",
+      "nombre": "Desfile de Autos Clásicos",
+      "categoria": "desfile",
+      "lugar": "senda",
+      "concentracion": "Sector Capusigra",
+      "finalizacion": "Av. Alfonso Zambrano",
+      "descripcion": "Exhibición de automóviles, camionetas, jeeps y motocicletas de distintas épocas.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "ofrenda-a-la-virgen-de-las-mercedes",
+      "fecha": "2026-01-02",
+      "hora": "07:00",
+      "nombre": "Ofrenda a la Virgen de las Mercedes",
+      "categoria": "tradicion",
+      "lugar": "templo-merced",
+      "descripcion": "Ofrenda con la que se abren los días centrales del Carnaval.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "carnavalito",
+      "fecha": "2026-01-02",
+      "hora": "10:00",
+      "nombre": "Carnavalito",
+      "categoria": "desfile",
+      "lugar": "senda",
+      "concentracion": "I.E.M. Escuela Normal Superior de Pasto",
+      "finalizacion": "Carrera 14 con Av. Champagnat",
+      "descripcion": "Desfile de niñas, niños y adolescentes que muestra la herencia cultural del Carnaval, transmitida de generación en generación. Es el semillero de artistas de la fiesta.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "concierto-el-dia-de-la-salsa",
+      "fecha": "2026-01-02",
+      "hora": "14:00",
+      "nombre": "Concierto El Día de la Salsa",
+      "categoria": "musica",
+      "lugar": "concha-acustica",
+      "descripcion": "Concierto de salsa.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "rock-carnaval",
+      "fecha": "2026-01-02",
+      "hora": "14:00",
+      "nombre": "Rock Carnaval",
+      "categoria": "musica",
+      "lugar": "plaza-carnaval",
+      "descripcion": "Concierto de agrupaciones locales de rock y música alternativa con artistas invitados.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "100Fuegos",
+          "tipo": "Banda"
+        },
+        {
+          "nombre": "Sonpa",
+          "tipo": "Banda"
+        },
+        {
+          "nombre": "Despertar Después del Mediodía",
+          "tipo": "Banda"
+        },
+        {
+          "nombre": "Insanity",
+          "tipo": "Banda"
+        },
+        {
+          "nombre": "Los Setas",
+          "tipo": "Banda"
+        },
+        {
+          "nombre": "La Tulpa Raymi",
+          "tipo": "Banda"
+        }
+      ]
+    },
+    {
+      "id": "narino-musical",
+      "fecha": "2026-01-02",
+      "hora": "16:00",
+      "nombre": "Nariño Musical",
+      "categoria": "musica",
+      "lugar": "plaza-narino",
+      "descripcion": "Concierto con músicos de Nariño en la Plaza de Nariño.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "canto-a-la-tierra",
+      "fecha": "2026-01-03",
+      "hora": "10:00",
+      "nombre": "Canto a la Tierra",
+      "categoria": "danza",
+      "lugar": "senda",
+      "concentracion": "I.E.M. Técnico Industrial – Cresemillas",
+      "finalizacion": "Estadio Departamental Libertad",
+      "descripcion": "Desfile de colectivos coreográficos que rinde tributo a la madre tierra con música y danza de herencia andina.",
+      "colectivos": [
+        "herencia-mestiza",
+        "inti-wayra",
+        "zarandearte",
+        "indoamericanto",
+        "inti-raymi-pasto",
+        "ciudad-de-pasto",
+        "proyeccion-goretti",
+        "raza-libertad",
+        "killacinga",
+        "ardanza",
+        "ayawaska"
+      ],
+      "participantes": []
+    },
+    {
+      "id": "concierto-de-musica-campesina",
+      "fecha": "2026-01-03",
+      "hora": "14:00",
+      "nombre": "Concierto de música campesina",
+      "categoria": "musica",
+      "lugar": "plaza-carnaval",
+      "descripcion": "Agrupaciones de música campesina de Pasto y sus corregimientos en la Plaza del Carnaval.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Son de Nariño",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Harinson y la Liga del Sabor",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Picantes de Atriz",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Los Ovnis",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Son Guasquero",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Los Montañeros de Catambuco",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Trino Sur",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Los Alegres de Genoy",
+          "tipo": "Grupo"
+        }
+      ]
+    },
+    {
+      "id": "concierto-cantos-de-vida",
+      "fecha": "2026-01-03",
+      "hora": "15:00",
+      "nombre": "Concierto Cantos de Vida",
+      "categoria": "musica",
+      "lugar": "plaza-carnaval",
+      "descripcion": "Concierto de música andina con agrupaciones nacionales e internacionales.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Rumichaca",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Alma y Sentimiento",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Canto y Libertad",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Mawá",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Kaipimicanchi",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Amaru de Colombia Internacional",
+          "tipo": "Grupo"
+        },
+        {
+          "nombre": "Inkalá de Colombia",
+          "tipo": "Grupo"
+        }
+      ]
+    },
+    {
+      "id": "rumba-carnavalera",
+      "fecha": "2026-01-03",
+      "hora": "16:00",
+      "nombre": "Rumba Carnavalera",
+      "categoria": "musica",
+      "lugar": "plaza-carnaval",
+      "descripcion": "Orquestas y grupos bailables con artista invitado.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Son Kaney",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Grupo Los Fiesteros",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Orquesta Femenina Oxígeno",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Tropicumbia Orquesta",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Tropirumba Pasto",
+          "tipo": "Agrupación"
+        }
+      ]
+    },
+    {
+      "id": "llegada-de-la-familia-castaneda",
+      "fecha": "2026-01-04",
+      "hora": "10:00",
+      "nombre": "Llegada de la Familia Castañeda",
+      "categoria": "desfile",
+      "lugar": "senda",
+      "concentracion": "I.E.M. Técnico Industrial – Cresemillas",
+      "finalizacion": "Av. Alfonso Zambrano",
+      "descripcion": "Desfile tradicional con escenas de la memoria rural y urbana de la región, en tono de humor popular.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "rumba-carnavalera-narino",
+      "fecha": "2026-01-04",
+      "hora": "16:00",
+      "nombre": "Rumba Carnavalera",
+      "categoria": "musica",
+      "lugar": "plaza-narino",
+      "descripcion": "Orquestas y grupos bailables con artistas invitados.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Los Arrieros de Colombia Show",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Javier Acosta y su Tropishow",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Tropical Internacional Orquesta",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Ráfaga de Colombia",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Fabuloso Sexteto Caracha",
+          "tipo": "Agrupación"
+        }
+      ]
+    },
+    {
+      "id": "rumba-carnavalera-carnaval",
+      "fecha": "2026-01-04",
+      "hora": "16:00",
+      "nombre": "Rumba Carnavalera",
+      "categoria": "musica",
+      "lugar": "plaza-carnaval",
+      "descripcion": "Orquestas y grupos bailables con artistas invitados.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Son Trapiche",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Orquesta La Sinceridad",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Orquesta Cañaveral",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Wilson y sus Estrellas",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Agrupación Musical Son de San Juan",
+          "tipo": "Agrupación"
+        }
+      ]
+    },
+    {
+      "id": "concierto-todos-la-misma-pintica",
+      "fecha": "2026-01-05",
+      "hora": "14:00",
+      "nombre": "Concierto «Todos la misma pintica»",
+      "categoria": "musica",
+      "lugar": "plaza-carnaval",
+      "descripcion": "Concierto organizado por la Gobernación de Nariño.",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "dia-de-negros",
+      "fecha": "2026-01-05",
+      "hora": "14:00",
+      "nombre": "Día de Negros",
+      "categoria": "tradicion",
+      "lugar": "comunas",
+      "descripcion": "Juego tradicional en el que la gente se pinta el rostro de negro con cosmético, pidiendo «una pintica, por favor».",
+      "colectivos": [],
+      "participantes": []
+    },
+    {
+      "id": "rumba-carnavalera-narino-05",
+      "fecha": "2026-01-05",
+      "hora": "16:00",
+      "nombre": "Rumba Carnavalera",
+      "categoria": "musica",
+      "lugar": "plaza-narino",
+      "descripcion": "Orquestas y grupos bailables con artista invitado.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Latin Clazz",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Grupo Musical Oro Negro",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Abran Paso La Banda",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Tropiband Orquesta",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Los Hermanos Genoy",
+          "tipo": "Agrupación"
+        }
+      ]
+    },
+    {
+      "id": "desfile-magno",
+      "fecha": "2026-01-06",
+      "hora": "08:00",
+      "nombre": "Desfile Magno",
+      "categoria": "desfile",
+      "lugar": "senda",
+      "concentracion": "I.E.M. Luis Delfín Insuasty (INEM) – Av. Mijitayo",
+      "finalizacion": "Av. Alfonso Zambrano – Estadio Departamental Libertad",
+      "descripcion": "El desfile central del Día de Blancos: carrozas monumentales, comparsas, murgas y colectivos recorren la Senda del Carnaval.",
+      "colectivos": [
+        "indomable-mujer-guerrera",
+        "carnaval-negros-blancos",
+        "narino-alas-de-vida"
+      ],
+      "participantes": [
+        {
+          "nombre": "Carrozas A",
+          "cantidad": 20
+        },
+        {
+          "nombre": "Carrozas B",
+          "cantidad": 6
+        },
+        {
+          "nombre": "Comparsas",
+          "cantidad": 30
+        },
+        {
+          "nombre": "Murgas",
+          "cantidad": 30
+        },
+        {
+          "nombre": "Disfraces individuales",
+          "cantidad": 30
+        }
+      ]
+    },
+    {
+      "id": "rumba-carnavalera-narino-06",
+      "fecha": "2026-01-06",
+      "hora": "16:00",
+      "nombre": "Rumba Carnavalera",
+      "categoria": "musica",
+      "lugar": "plaza-narino",
+      "descripcion": "Orquestas y grupos bailables con artistas invitados.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Rubio Hoyos y su Grupo Ideal",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Orquesta Clase Aparte de Colombia",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "La Parranda del Sur",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Orquesta Calle Nuestra",
+          "tipo": "Agrupación"
+        }
+      ]
+    },
+    {
+      "id": "rumba-carnavalera-carnaval-06",
+      "fecha": "2026-01-06",
+      "hora": "16:00",
+      "nombre": "Rumba Carnavalera",
+      "categoria": "musica",
+      "lugar": "plaza-carnaval",
+      "descripcion": "Orquestas y grupos bailables con artistas invitados.",
+      "colectivos": [],
+      "participantes": [
+        {
+          "nombre": "Andes de Canchala",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Afroonda Orquesta",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Grupo Amistad",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Adrián Bravo y su Orquesta",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Sexy Canela",
+          "tipo": "Agrupación"
+        },
+        {
+          "nombre": "Banda Bravura",
+          "tipo": "Agrupación"
+        }
+      ]
+    },
+    {
+      "id": "festival-del-cuy-y-la-cultura-campesina",
+      "fecha": "2026-01-07",
+      "hora": "09:00",
+      "nombre": "Festival del Cuy y la Cultura Campesina",
+      "categoria": "tradicion",
+      "lugar": "corregimientos",
+      "descripcion": "Gastronomía y cultura campesina en los corregimientos de La Laguna, Catambuco, Obonuco y Genoy. Organiza la Secretaría de Agricultura Municipal.",
+      "colectivos": [],
+      "participantes": []
+    }
   ],
   "colectivos": [
-    { "id": "indomable-mujer-guerrera", "nombre": "Indomable, Mujer Guerrera", "tipo": "Carroza", "categoria": "Carroza", "jornada": "dia-de-blancos", "autor": "Maestro Óscar Fernando Ruano Luna", "resultado": "Primer puesto · 97,50 puntos", "descripcion": "Carroza monumental del Desfile Magno. Ganó el primer puesto de la edición 2026." },
-    { "id": "carnaval-negros-blancos", "nombre": "Carnaval de Negros y Blancos", "tipo": "Carroza", "categoria": "Carroza", "jornada": "dia-de-blancos", "autor": "Maestro Mateo Zarama Santacruz", "resultado": "Segundo puesto · 95,00 puntos", "descripcion": "Carroza del Desfile Magno dedicada a la propia fiesta y a sus colores." },
-    { "id": "narino-alas-de-vida", "nombre": "Nariño en Alas de Vida", "tipo": "Carroza", "categoria": "Carroza", "jornada": "dia-de-blancos", "autor": "Maestro Jairo Andrés Días Yarpaz", "resultado": "Tercer puesto · 92,50 puntos", "descripcion": "Carroza del Desfile Magno con motivos de la naturaleza y la vida de Nariño." },
-    { "id": "proyeccion-coral", "nombre": "Corporación Artística Cultural y Deportiva Proyección Coral", "tipo": "Colectivo coreográfico", "categoria": "Categoría A", "jornada": "canto-a-la-tierra", "obra": "Mágica Mujer", "resultado": "Primer puesto categoría A · 95,67 puntos", "descripcion": "Colectivo coreográfico de categoría A. En 2026 presentó la obra «Mágica Mujer»." },
-    { "id": "raza-libertad", "nombre": "Fundación Cultural Raza Libertad", "tipo": "Colectivo coreográfico", "categoria": "Categoría A", "jornada": "canto-a-la-tierra", "obra": "Señores de la Luna", "resultado": "Segundo puesto categoría A · 95,66 puntos", "descripcion": "Colectivo coreográfico de categoría A. En 2026 presentó la obra «Señores de la Luna»." },
-    { "id": "indioamericanto", "nombre": "Fundación Cultural Indioamericanto", "tipo": "Colectivo coreográfico", "categoria": "Categoría A", "jornada": "canto-a-la-tierra", "obra": "Samay Aliento del Cosmos", "resultado": "Tercer puesto categoría A", "descripcion": "Colectivo coreográfico de categoría A. En 2026 presentó la obra «Samay Aliento del Cosmos»." },
-    { "id": "ayawaska", "nombre": "Fundación Cultural Ayawaska", "tipo": "Colectivo coreográfico", "categoria": "Categoría B", "jornada": "canto-a-la-tierra", "obra": "Zara: por los caminos del maíz", "resultado": "Primer puesto categoría B · 90,66 puntos", "descripcion": "Colectivo coreográfico de categoría B. En 2026 presentó la obra «Zara: por los caminos del maíz»." },
-    { "id": "inti-wayra", "nombre": "Fundación Social y Cultural Inti Wayra", "tipo": "Colectivo coreográfico", "categoria": "Categoría B", "jornada": "canto-a-la-tierra", "obra": "Runa Pacha Dualidad del Mundo Andino", "resultado": "Segundo puesto categoría B · 89,32 puntos", "descripcion": "Colectivo coreográfico de categoría B. En 2026 presentó la obra «Runa Pacha Dualidad del Mundo Andino»." },
-    { "id": "herencia-mestiza", "nombre": "Fundación Cultural Herencia Mestiza", "tipo": "Colectivo coreográfico", "categoria": "Categoría B", "jornada": "canto-a-la-tierra", "obra": "Desde el mar hasta el Galeras, una joya cultural", "resultado": "Tercer puesto categoría B · 88,67 puntos", "descripcion": "Colectivo coreográfico de categoría B. En 2026 presentó la obra «Desde el mar hasta el Galeras, una joya cultural»." }
+    {
+      "id": "indomable-mujer-guerrera",
+      "nombre": "Indomable, Mujer Guerrera",
+      "tipo": "Carroza",
+      "categoria": "Carroza",
+      "jornada": "dia-de-blancos",
+      "resultado": "Primer puesto · 97,50 puntos",
+      "descripcion": "Carroza monumental del Desfile Magno, obra de un maestro carrocero de Pasto. Ganó el primer puesto de la edición 2026."
+    },
+    {
+      "id": "carnaval-negros-blancos",
+      "nombre": "Carnaval de Negros y Blancos",
+      "tipo": "Carroza",
+      "categoria": "Carroza",
+      "jornada": "dia-de-blancos",
+      "resultado": "Segundo puesto · 95,00 puntos",
+      "descripcion": "Carroza del Desfile Magno dedicada a la propia fiesta y a sus colores."
+    },
+    {
+      "id": "narino-alas-de-vida",
+      "nombre": "Nariño en Alas de Vida",
+      "tipo": "Carroza",
+      "categoria": "Carroza",
+      "jornada": "dia-de-blancos",
+      "resultado": "Tercer puesto · 92,50 puntos",
+      "descripcion": "Carroza del Desfile Magno con motivos de la naturaleza y la vida de Nariño."
+    },
+    {
+      "id": "herencia-mestiza",
+      "nombre": "Fundación Cultural Herencia Mestiza",
+      "tipo": "Colectivo coreográfico",
+      "categoria": "Categoría B",
+      "jornada": "canto-a-la-tierra",
+      "obra": "Desde el mar hasta el Galeras, una joya cultural",
+      "resultado": "Tercer puesto categoría B · 88,67 puntos",
+      "descripcion": "Colectivo coreográfico acreditado de la categoría B. En 2026 presentó la obra «Desde el mar hasta el Galeras, una joya cultural»."
+    },
+    {
+      "id": "inti-wayra",
+      "nombre": "Fundación Social y Cultural Inti Wayra",
+      "tipo": "Colectivo coreográfico",
+      "categoria": "Categoría B",
+      "jornada": "canto-a-la-tierra",
+      "obra": "Runa Pacha Dualidad del Mundo Andino",
+      "resultado": "Segundo puesto categoría B · 89,32 puntos",
+      "descripcion": "Colectivo coreográfico acreditado de la categoría B. En 2026 presentó la obra «Runa Pacha Dualidad del Mundo Andino»."
+    },
+    {
+      "id": "zarandearte",
+      "nombre": "Corporación Cultural Zarandearte",
+      "tipo": "Colectivo coreográfico",
+      "jornada": "canto-a-la-tierra",
+      "descripcion": "Colectivo coreográfico acreditado en la edición 2026. Participa en el desfile Canto a la Tierra."
+    },
+    {
+      "id": "indoamericanto",
+      "nombre": "Fundación Cultural Indoamericanto",
+      "tipo": "Colectivo coreográfico",
+      "categoria": "Categoría A",
+      "jornada": "canto-a-la-tierra",
+      "obra": "Samay Aliento del Cosmos",
+      "resultado": "Tercer puesto categoría A",
+      "descripcion": "Colectivo coreográfico acreditado de la categoría A. En 2026 presentó la obra «Samay Aliento del Cosmos»."
+    },
+    {
+      "id": "inti-raymi-pasto",
+      "nombre": "Fundación Inti Raymi Pasto",
+      "tipo": "Colectivo coreográfico",
+      "jornada": "canto-a-la-tierra",
+      "descripcion": "Colectivo coreográfico acreditado en la edición 2026. Participa en el desfile Canto a la Tierra."
+    },
+    {
+      "id": "ciudad-de-pasto",
+      "nombre": "Fundación Cultural Ciudad de Pasto",
+      "tipo": "Colectivo coreográfico",
+      "jornada": "canto-a-la-tierra",
+      "descripcion": "Colectivo coreográfico acreditado en la edición 2026. Participa en el desfile Canto a la Tierra."
+    },
+    {
+      "id": "proyeccion-goretti",
+      "nombre": "Corporación Artística Cultural y Deportiva Proyección Goretti",
+      "tipo": "Colectivo coreográfico",
+      "jornada": "canto-a-la-tierra",
+      "descripcion": "Colectivo coreográfico acreditado en la edición 2026. Participa en el desfile Canto a la Tierra."
+    },
+    {
+      "id": "raza-libertad",
+      "nombre": "Fundación Cultural Raza Libertad",
+      "tipo": "Colectivo coreográfico",
+      "categoria": "Categoría A",
+      "jornada": "canto-a-la-tierra",
+      "obra": "Señores de la Luna",
+      "resultado": "Segundo puesto categoría A · 95,66 puntos",
+      "descripcion": "Colectivo coreográfico acreditado de la categoría A. En 2026 presentó la obra «Señores de la Luna»."
+    },
+    {
+      "id": "killacinga",
+      "nombre": "Fundación Sociocultural Killacinga Lo Que Somos",
+      "tipo": "Colectivo coreográfico",
+      "jornada": "canto-a-la-tierra",
+      "descripcion": "Colectivo coreográfico acreditado en la edición 2026. Participa en el desfile Canto a la Tierra."
+    },
+    {
+      "id": "ardanza",
+      "nombre": "Fundación Cultural Ardanza",
+      "tipo": "Colectivo coreográfico",
+      "jornada": "canto-a-la-tierra",
+      "descripcion": "Colectivo coreográfico acreditado en la edición 2026. Participa en el desfile Canto a la Tierra."
+    },
+    {
+      "id": "ayawaska",
+      "nombre": "Fundación Cultural Ayawaska",
+      "tipo": "Colectivo coreográfico",
+      "categoria": "Categoría B",
+      "jornada": "canto-a-la-tierra",
+      "obra": "Zara: por los caminos del maíz",
+      "resultado": "Primer puesto categoría B · 90,66 puntos",
+      "descripcion": "Colectivo coreográfico acreditado de la categoría B. En 2026 presentó la obra «Zara: por los caminos del maíz»."
+    }
   ],
   "jornadas": [
-    { "id": "precarnaval", "nombre": "Precarnaval", "fechas": ["2025-12-28", "2025-12-29", "2025-12-30", "2025-12-31"], "etiquetas": ["Antesala", "Barrios y veredas"], "resumen": "Cuatro días que preparan la ciudad para la fiesta mayor, con deporte, música y el adiós satírico al año que termina.", "texto": "El precarnaval lleva la fiesta a las comunas y a los corregimientos antes de que empiecen los desfiles centrales. Se corre, se pinta la calle con tiza, se canta y se baila. El 31 de diciembre, los años viejos recorren la Senda: muñecos que se burlan de lo que pasó en el año, acompañados de una viuda que los llora y de un testamento que se lee en voz alta." },
-    { "id": "carnavalito", "nombre": "Carnavalito", "fechas": ["2026-01-02"], "etiquetas": ["Niñas y niños", "60 años"], "resumen": "El desfile en el que niñas y niños aprenden y heredan los oficios del Carnaval.", "texto": "En 2026 el Carnavalito cumplió 60 años. Niñas y niños salen con murguitas, comparsas, colectivos coreográficos y minicarrocitas que ellos mismos ayudan a construir en los talleres. Es la escuela del Carnaval: allí empiezan muchos de los futuros maestros artesanos, músicos y danzantes." },
-    { "id": "canto-a-la-tierra", "nombre": "Canto a la Tierra", "fechas": ["2026-01-03"], "etiquetas": ["Danza andina", "Madre tierra"], "resumen": "Los colectivos coreográficos rinden tributo a la tierra con música y danza de herencia andina.", "texto": "Cientos de danzantes recorren la Senda del Carnaval en colectivos coreográficos que cuentan historias de la tierra, el maíz, la luna y el cosmos andino. Cada colectivo prepara durante meses su vestuario, su música y su coreografía, y un jurado los evalúa por categorías." },
-    { "id": "familia-castaneda", "nombre": "Familia Castañeda", "fechas": ["2026-01-04"], "etiquetas": ["Humor popular", "Memoria"], "resumen": "Recrea la llegada de una familia numerosa a la ciudad, con humor y personajes de la vida cotidiana.", "texto": "La tradición cuenta que, a comienzos del siglo XX, una familia campesina numerosa llegó a Pasto y fue recibida por la ciudad con alegría. Desde entonces, su llegada se representa cada 4 de enero con personajes pintorescos, escenas de la vida rural y urbana y mucho humor." },
-    { "id": "dia-de-negros", "nombre": "Día de Negros", "fechas": ["2026-01-05"], "etiquetas": ["Igualdad", "Una pintica"], "resumen": "La ciudad se pinta de negro como gesto de igualdad y fraternidad.", "texto": "El juego de negros tiene su origen en la época colonial, cuando la población esclavizada obtuvo un día de descanso y celebración. Hoy, con cosmético negro, vecinos y visitantes se pintan unos a otros pidiendo «una pintica, por favor». Pintarse del mismo color es una forma de decir que todos somos iguales." },
-    { "id": "dia-de-blancos", "nombre": "Día de Blancos y Desfile Magno", "fechas": ["2026-01-06"], "etiquetas": ["Desfile Magno", "Carrozas"], "resumen": "El día central: el juego con talco y el desfile de las carrozas monumentales.", "texto": "El juego de blancos nació en 1912, el día de Reyes, cuando un grupo de jóvenes esparció polvo perfumado entre los presentes. Hoy la ciudad se cubre de talco mientras pasa el Desfile Magno: carrozas monumentales hechas en los talleres de los maestros artesanos, junto con comparsas, murgas y colectivos. La edición 2026 conmemoró los cien años del primer Corso de Flores de 1926 con el lema «Hecho con el Alma»." },
-    { "id": "cierre-campesino", "nombre": "Cierre campesino", "fechas": ["2026-01-07"], "etiquetas": ["Gastronomía", "Corregimientos"], "resumen": "La fiesta se despide en los corregimientos con el Festival del Cuy y la Cultura Campesina.", "texto": "Después del Desfile Magno, la celebración pasa al campo. En La Laguna, Catambuco, Obonuco y Genoy se celebran el cuy, plato tradicional de la región, y la cultura campesina que sostiene buena parte del Carnaval." }
+    {
+      "id": "precarnaval",
+      "nombre": "Precarnaval",
+      "fechas": [
+        "2025-12-28",
+        "2025-12-29",
+        "2025-12-30",
+        "2025-12-31"
+      ],
+      "etiquetas": [
+        "Antesala",
+        "Barrios y veredas"
+      ],
+      "resumen": "Cuatro días que preparan la ciudad para la fiesta mayor, con deporte, música y el adiós satírico al año que termina.",
+      "texto": "El precarnaval lleva la fiesta a las comunas y a los corregimientos antes de que empiecen los desfiles centrales. Se corre, se pinta la calle con tiza, se canta y se baila. El 31 de diciembre, los años viejos recorren la Senda: muñecos que se burlan de lo que pasó en el año, acompañados de una viuda que los llora y de un testamento que se lee en voz alta."
+    },
+    {
+      "id": "carnavalito",
+      "nombre": "Carnavalito",
+      "fechas": [
+        "2026-01-02"
+      ],
+      "etiquetas": [
+        "Niñas y niños",
+        "60 años"
+      ],
+      "resumen": "El desfile en el que niñas y niños aprenden y heredan los oficios del Carnaval.",
+      "texto": "En 2026 el Carnavalito cumplió 60 años. Niñas y niños salen con murguitas, comparsas, colectivos coreográficos y minicarrocitas que ellos mismos ayudan a construir en los talleres. Es la escuela del Carnaval: allí empiezan muchos de los futuros maestros artesanos, músicos y danzantes."
+    },
+    {
+      "id": "canto-a-la-tierra",
+      "nombre": "Canto a la Tierra",
+      "fechas": [
+        "2026-01-03"
+      ],
+      "etiquetas": [
+        "Danza andina",
+        "Madre tierra"
+      ],
+      "resumen": "Los colectivos coreográficos rinden tributo a la tierra con música y danza de herencia andina.",
+      "texto": "Cientos de danzantes recorren la Senda del Carnaval en colectivos coreográficos que cuentan historias de la tierra, el maíz, la luna y el cosmos andino. Cada colectivo prepara durante meses su vestuario, su música y su coreografía, y un jurado los evalúa por categorías."
+    },
+    {
+      "id": "familia-castaneda",
+      "nombre": "Familia Castañeda",
+      "fechas": [
+        "2026-01-04"
+      ],
+      "etiquetas": [
+        "Humor popular",
+        "Memoria"
+      ],
+      "resumen": "Recrea la llegada de una familia numerosa a la ciudad, con humor y personajes de la vida cotidiana.",
+      "texto": "La tradición cuenta que, a comienzos del siglo XX, una familia campesina numerosa llegó a Pasto y fue recibida por la ciudad con alegría. Desde entonces, su llegada se representa cada 4 de enero con personajes pintorescos, escenas de la vida rural y urbana y mucho humor."
+    },
+    {
+      "id": "dia-de-negros",
+      "nombre": "Día de Negros",
+      "fechas": [
+        "2026-01-05"
+      ],
+      "etiquetas": [
+        "Igualdad",
+        "Una pintica"
+      ],
+      "resumen": "La ciudad se pinta de negro como gesto de igualdad y fraternidad.",
+      "texto": "El juego de negros tiene su origen en la época colonial, cuando la población esclavizada obtuvo un día de descanso y celebración. Hoy, con cosmético negro, vecinos y visitantes se pintan unos a otros pidiendo «una pintica, por favor». Pintarse del mismo color es una forma de decir que todos somos iguales."
+    },
+    {
+      "id": "dia-de-blancos",
+      "nombre": "Día de Blancos y Desfile Magno",
+      "fechas": [
+        "2026-01-06"
+      ],
+      "etiquetas": [
+        "Desfile Magno",
+        "Carrozas"
+      ],
+      "resumen": "El día central: el juego con talco y el desfile de las carrozas monumentales.",
+      "texto": "El juego de blancos nació en 1912, el día de Reyes, cuando un grupo de jóvenes esparció polvo perfumado entre los presentes. Hoy la ciudad se cubre de talco mientras pasa el Desfile Magno: carrozas monumentales hechas en los talleres de los maestros artesanos, junto con comparsas, murgas y colectivos. La edición 2026 conmemoró los cien años del primer Corso de Flores de 1926 con el lema «Hecho con el Alma»."
+    },
+    {
+      "id": "cierre-campesino",
+      "nombre": "Cierre campesino",
+      "fechas": [
+        "2026-01-07"
+      ],
+      "etiquetas": [
+        "Gastronomía",
+        "Corregimientos"
+      ],
+      "resumen": "La fiesta se despide en los corregimientos con el Festival del Cuy y la Cultura Campesina.",
+      "texto": "Después del Desfile Magno, la celebración pasa al campo. En La Laguna, Catambuco, Obonuco y Genoy se celebran el cuy, plato tradicional de la región, y la cultura campesina que sostiene buena parte del Carnaval."
+    }
   ],
   "informacionPractica": {
     "emergencias": [
-      { "nombre": "Línea única de emergencias", "numero": "123" },
-      { "nombre": "Bomberos", "numero": "119" },
-      { "nombre": "Cruz Roja", "numero": "132" }
+      {
+        "nombre": "Línea única de emergencias",
+        "numero": "123"
+      },
+      {
+        "nombre": "Bomberos",
+        "numero": "119"
+      },
+      {
+        "nombre": "Cruz Roja",
+        "numero": "132"
+      }
     ]
   }
 }
