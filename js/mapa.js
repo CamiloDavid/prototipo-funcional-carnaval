@@ -49,16 +49,18 @@ export const lineaSvg = (proy, puntos) => 'M' + puntos.map(([la, lo]) => proy(la
 export function activarGestos(svg, base, alCambiar) {
   const vista = { x: 0, y: 0, w: base.ancho, h: base.alto };
   const aspecto = () => svg.clientHeight / svg.clientWidth || 1.1;
+  // La vista nunca sale del área dibujada, para que no aparezcan zonas vacías
+  const anchoMax = () => Math.min(base.ancho, base.alto / aspecto());
   const aplicar = () => {
-    vista.w = Math.min(Math.max(vista.w, 120), base.ancho * 1.05);
+    vista.w = Math.min(Math.max(vista.w, 120), anchoMax());
     vista.h = vista.w * aspecto();
-    vista.x = Math.min(Math.max(vista.x, -vista.w * 0.3), base.ancho - vista.w * 0.7);
-    vista.y = Math.min(Math.max(vista.y, -vista.h * 0.3), base.alto - vista.h * 0.7);
+    vista.x = Math.min(Math.max(vista.x, 0), base.ancho - vista.w);
+    vista.y = Math.min(Math.max(vista.y, 0), base.alto - vista.h);
     svg.setAttribute('viewBox', `${vista.x} ${vista.y} ${vista.w} ${vista.h}`);
     alCambiar(vista.w / svg.clientWidth);
   };
   const zoom = (factor, cx = vista.x + vista.w / 2, cy = vista.y + vista.h / 2) => {
-    const w = Math.min(Math.max(vista.w * factor, 120), base.ancho * 1.05);
+    const w = Math.min(Math.max(vista.w * factor, 120), anchoMax());
     const f = w / vista.w;
     vista.x = cx - (cx - vista.x) * f;
     vista.y = cy - (cy - vista.y) * f;
