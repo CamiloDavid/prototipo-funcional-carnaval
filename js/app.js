@@ -33,6 +33,24 @@ function guardarRecordatorios() {
   try { localStorage.setItem(CLAVE_RECORDATORIOS, JSON.stringify(recordatorios)); } catch { /* sin almacenamiento */ }
 }
 
+// Cambios de horario o lugar detectados en los favoritos al actualizar (HU-17)
+const CLAVE_CAMBIOS = 'cnb-cambios';
+const cambios = leer(CLAVE_CAMBIOS, {});
+function guardarCambios() {
+  try { localStorage.setItem(CLAVE_CAMBIOS, JSON.stringify(cambios)); } catch { /* sin almacenamiento */ }
+}
+
+// Ajustes de accesibilidad: se aplican en todas las pantallas y se conservan al reabrir (HU-07)
+const CLAVE_AJUSTES = 'cnb-ajustes';
+const ajustes = { escala: 1, contraste: false, ...leer(CLAVE_AJUSTES, {}) };
+function aplicarAjustes() {
+  document.documentElement.style.setProperty('--escala', ajustes.escala);
+  if (ajustes.contraste) document.documentElement.dataset.contraste = 'alto';
+  else delete document.documentElement.dataset.contraste;
+  try { localStorage.setItem(CLAVE_AJUSTES, JSON.stringify(ajustes)); } catch { /* sin almacenamiento */ }
+}
+aplicarAjustes();
+
 // Utilidades
 const porId = (lista, id) => lista.find((x) => x.id === id);
 const categoria = (id) => porId(datos.categorias, id);
@@ -77,7 +95,7 @@ function tarjetaEvento(ev) {
     <article class="tarjeta-evento">
       <div class="hora">${h.hora}<small>${h.sufijo}</small></div>
       <div>
-        <span class="etiqueta etiqueta--${cat.color}">${cat.nombre}</span>
+        <span class="etiqueta etiqueta--${cat.color}">${cat.nombre}</span>${cambioPendiente(ev.id) ? ' <span class="etiqueta etiqueta--cambio">Cambió</span>' : ''}
         <h3><a class="enlace-tarjeta" href="#/evento/${ev.id}">${ev.nombre}</a></h3>
         <p class="lugar">${iconos.lugar}${lugar(ev.lugar).nombre}</p>
       </div>
@@ -117,6 +135,10 @@ function pantallaInicio() {
         <span class="avatar avatar--verde">${iconos.ruta}</span>
         <span><b>Cómo moverse</b><small>Cierres y restricciones de cada día</small></span>${iconos.flecha}
       </a>
+      <a class="enlace-fila" href="#/ajustes">
+        <span class="avatar avatar--gris">${iconos.ajustes}</span>
+        <span><b>Ajustes de accesibilidad</b><small>Tamaño de letra y contraste</small></span>${iconos.flecha}
+      </a>
     </div>`;
 }
 
@@ -133,6 +155,7 @@ function pantallaAgenda(_, params) {
     <div class="fila-chips" id="dias" role="group" aria-label="Día">
       ${datos.dias.map((d) => `<button class="chip-dia" data-dia="${d.fecha}" aria-pressed="${d.fecha === agenda.dia}"><small>${d.dia}</small><b>${d.etiqueta.split(' ')[0]}</b><small>${d.etiqueta.split(' ')[1]}</small></button>`).join('')}
     </div>
+    <a class="enlace-jornada" id="enlace-jornada" href="#/cultura"></a>
     <div class="fila-chips" role="group" aria-label="Categoría">
       ${chip('categoria', 'todas', 'Todas')}${datos.categorias.map((c) => chip('categoria', c.id, c.nombre)).join('')}
     </div>
@@ -163,6 +186,11 @@ function actualizarAgenda() {
   $pantalla.querySelectorAll('[data-dia]').forEach((b) => b.setAttribute('aria-pressed', !buscando && b.dataset.dia === agenda.dia));
   $pantalla.querySelectorAll('[data-filtro]').forEach((b) => b.setAttribute('aria-pressed', agenda[b.dataset.filtro] === b.dataset.valor));
   document.getElementById('dias').classList.toggle('fila-chips--apagada', buscando);
+  const $jornada = document.getElementById('enlace-jornada');
+  const jornada = porId(datos.jornadas, datos.dias.find((d) => d.fecha === agenda.dia).jornada);
+  $jornada.hidden = buscando;
+  $jornada.href = `#/cultura?jornada=${jornada.id}`;
+  $jornada.innerHTML = `${iconos.cultura}<span>Sentido cultural: <b>${jornada.nombre}</b></span>${iconos.flecha}`;
   document.getElementById('limpiar').hidden = !(agenda.texto || agenda.categoria !== 'todas' || agenda.lugar !== 'todos');
 
   const n = eventos.length;
@@ -206,7 +234,7 @@ function pantallaEvento([id]) {
       <a class="btn btn--secundario" href="#/mapa?evento=${ev.id}">${iconos.mapa}Ver en mapa</a>
       <button class="btn" data-recordar="${ev.id}">${iconos.campana}Recordarme</button>
     </div>
-    <div id="aviso-detalle" aria-live="polite"></div>
+    <div id="aviso-detalle" aria-live="polite">${cambioPendiente(ev.id) ? avisoCambio(ev) : ''}</div>
     <h2 class="titulo-seccion">Descripción</h2>
     <p class="texto">${ev.descripcion}</p>
     <h2 class="titulo-seccion">${colectivos.length ? 'Colectivos participantes' : 'Participantes'}</h2>
@@ -450,9 +478,11 @@ async function buscarActualizacion(boton) {
     if (!navigator.onLine) throw new Error('sin conexión');
     const nuevos = await (await fetch('data/edicion-2026.json', { cache: 'no-store' })).json();
     if (nuevos.version !== datos.version) {
+      const cambiados = registrarCambios(datos, nuevos);
       datos = nuevos;
       textoBusqueda.clear();
-      $estado.innerHTML = `<div class="aviso aviso--exito">${iconos.check}<span>Se descargó la versión ${datos.version}.</span></div>`;
+      $estado.innerHTML = `<div class="aviso aviso--exito">${iconos.check}<span>Se descargó la versión ${datos.version}.${cambiados.length ? ` Cambiaron ${cambiados.length} de tus favoritos: revísalos en <a href="#/favoritos">Favoritos</a>.` : ''}</span></div>`;
+      avisarCambios(cambiados);
     } else {
       $estado.innerHTML = `<div class="aviso aviso--exito">${iconos.check}<span>Ya tienes la versión más reciente (${datos.version}).</span></div>`;
     }
@@ -598,8 +628,9 @@ function montarFavoritos() {
   } else {
     const fechas = [...new Set(visibles.map((e) => e.fecha))];
     html = fechas.map((f) => `<h2 class="titulo-dia">${fechaLarga(f)}</h2>${visibles.filter((e) => e.fecha === f).map((e) => `
-      <div class="favorito" id="favorito-${e.id}">${tarjetaEvento(e)}${bloqueRecordatorio(e)}</div>`).join('')}`).join('');
+      <div class="favorito" id="favorito-${e.id}">${tarjetaEvento(e)}${cambioPendiente(e.id) ? `<div class="favorito-cambio">${avisoCambio(e)}</div>` : ''}${bloqueRecordatorio(e)}</div>`).join('')}`).join('');
   }
+  if (proximos.length && favs.vista === 'proximos') html += bloqueSimulacion();
   document.getElementById('lista-favoritos').innerHTML = html;
 
   const $destacado = favs.destacado && document.getElementById(`favorito-${favs.destacado}`);
@@ -610,9 +641,157 @@ function montarFavoritos() {
   favs.destacado = null;
 }
 
+// 09 Aviso de cambio en favorito (HU-17)
+function cambioPendiente(id) { return Boolean(cambios[id] && !cambios[id].visto); }
+
+function textoCambio(c) {
+  const partes = [];
+  if (c.antes.fecha !== c.despues.fecha) partes.push(`fecha: ${fechaLarga(c.despues.fecha)} (antes ${fechaLarga(c.antes.fecha)})`);
+  if (c.antes.hora !== c.despues.hora) partes.push(`hora: ${horaCompleta(c.despues.hora)} (antes ${horaCompleta(c.antes.hora)})`);
+  if (c.antes.lugar !== c.despues.lugar) partes.push(`lugar: ${lugar(c.despues.lugar).nombre} (antes ${lugar(c.antes.lugar).nombre})`);
+  return partes.join('; ');
+}
+
+function avisoCambio(ev) {
+  const c = cambios[ev.id];
+  return `
+    <div class="aviso aviso--cambio">${iconos.info}
+      <span><b>La organización cambió este evento.</b> Nueva ${textoCambio(c)}.${recordatorios[ev.id] != null && c.antes.hora !== c.despues.hora ? ' Tu recordatorio se ajustó a la nueva hora.' : ''}
+        <button class="btn btn--texto" data-visto="${ev.id}">Entendido</button></span>
+    </div>`;
+}
+
+// Compara la programación guardada con la nueva y registra los favoritos que cambiaron
+function registrarCambios(anteriores, nuevos, simulado = false) {
+  const cambiados = [];
+  favoritos.forEach((id) => {
+    const a = porId(anteriores.eventos, id);
+    const d = porId(nuevos.eventos, id);
+    if (!a || !d || ['fecha', 'hora', 'lugar'].every((k) => a[k] === d[k])) return;
+    const original = cambios[id]?.simulado ? cambios[id].antes : { fecha: a.fecha, hora: a.hora, lugar: a.lugar };
+    cambios[id] = { antes: original, despues: { fecha: d.fecha, hora: d.hora, lugar: d.lugar }, visto: false, simulado: simulado || Boolean(cambios[id]?.simulado) };
+    cambiados.push(d);
+  });
+  guardarCambios();
+  return cambiados;
+}
+
+function avisarCambios(cambiados) {
+  if (!cambiados.length) return;
+  const ev = cambiados[0];
+  notificar(`#/evento/${ev.id}`, cambiados.length === 1 ? 'Cambió un evento de tus favoritos' : `Cambiaron ${cambiados.length} eventos de tus favoritos`,
+    `${ev.nombre}: nueva ${textoCambio(cambios[ev.id]).replace(/ \(antes [^)]*\)/g, '')}`);
+}
+
+// Prueba de laboratorio: llega una versión de la programación con un cambio de hora en un favorito
+function simularCambio() {
+  const ahora = new Date();
+  const candidatos = datos.eventos.filter((e) => favoritos.has(e.id) && fechaEnTemporada(e) >= ahora)
+    .sort((a, b) => (a.fecha + a.hora).localeCompare(b.fecha + b.hora));
+  const ev = candidatos.find((e) => !cambioPendiente(e.id)) ?? candidatos[0];
+  if (!ev) return;
+  const nuevos = structuredClone(datos);
+  const destino = porId(nuevos.eventos, ev.id);
+  const hh = Number(ev.hora.slice(0, 2));
+  destino.hora = `${String(hh >= 23 ? hh - 1 : hh + 1).padStart(2, '0')}${ev.hora.slice(2)}`;
+  const cambiados = registrarCambios(datos, nuevos, true);
+  datos = nuevos;
+  textoBusqueda.clear();
+  avisarCambios(cambiados);
+}
+
+function restablecerCambio(id) {
+  const c = cambios[id];
+  if (c?.simulado) Object.assign(porId(datos.eventos, id), c.antes);
+  delete cambios[id];
+}
+
+function bloqueSimulacion() {
+  const haySimulados = Object.values(cambios).some((c) => c.simulado);
+  return `
+    <section class="panel simulacion">
+      <b>Prueba de laboratorio</b>
+      <p>Simula que la organización cambia la hora de uno de tus próximos favoritos, para revisar el aviso de cambio.</p>
+      <button class="btn btn--secundario btn--bloque" data-simular-cambio>${iconos.recargar}Simular cambio de horario</button>
+      ${haySimulados ? '<button class="btn btn--texto btn--bloque" data-restablecer-cambios>Volver a la programación oficial</button>' : ''}
+    </section>`;
+}
+
+// 06 Cultura por jornada (HU-19)
+const ESTILO_JORNADA = {
+  precarnaval: ['azul', 'musica'], carnavalito: ['amarillo', 'desfile'], 'canto-a-la-tierra': ['verde', 'danza'],
+  'familia-castaneda': ['rojo', 'desfile'], 'dia-de-negros': ['gris', 'tradicion'], 'dia-de-blancos': ['azul', 'desfile'],
+  'cierre-campesino': ['verde', 'tradicion']
+};
+const cultura = { jornada: null, completo: false };
+
+function pantallaCultura(_, params) {
+  if (params.get('jornada') && porId(datos.jornadas, params.get('jornada'))) {
+    cultura.completo = cultura.jornada === params.get('jornada') && cultura.completo;
+    cultura.jornada = params.get('jornada');
+  }
+  cultura.jornada ??= datos.jornadas[0].id;
+  const j = porId(datos.jornadas, cultura.jornada);
+  const [color, motivo] = ESTILO_JORNADA[j.id] ?? ['gris', 'tradicion'];
+  const fechas = j.fechas.length === 1 ? fechaLarga(j.fechas[0]) : `Del ${fechaLarga(j.fechas[0]).toLowerCase()} al ${fechaLarga(j.fechas.at(-1)).toLowerCase()}`;
+  const eventos = datos.eventos.filter((e) => j.fechas.includes(e.fecha)).sort((a, b) => (a.fecha + a.hora).localeCompare(b.fecha + b.hora));
+  return `
+    <header class="encabezado"><div><h1>Cultura</h1><p class="sub">El sentido de cada jornada del Carnaval</p></div></header>
+    <div class="fila-chips" id="jornadas" role="group" aria-label="Jornada">
+      ${datos.jornadas.map((x) => `<a class="chip chip--enlace" href="#/cultura?jornada=${x.id}" aria-current="${x.id === j.id ? 'true' : 'false'}">${x.nombre}</a>`).join('')}
+    </div>
+    <article class="tarjeta-cultura">
+      <div class="cabecera-ilustrada cabecera--${color}">${ilustracion(motivo)}</div>
+      <div class="etiquetas">${j.etiquetas.map((t) => `<span class="etiqueta etiqueta--${color}">${t}</span>`).join('')}</div>
+      <h2 class="titulo-detalle">${j.nombre}</h2>
+      <p class="fecha-jornada">${iconos.agenda}${fechas}</p>
+      <p class="resumen-jornada">${j.resumen}</p>
+      <p class="texto texto-jornada${cultura.completo ? '' : ' texto-jornada--corto'}" id="texto-jornada">${j.texto}</p>
+      <button class="btn btn--texto" data-leer-mas aria-expanded="${cultura.completo}" aria-controls="texto-jornada">${cultura.completo ? 'Leer menos' : 'Leer más'}</button>
+      <a class="btn btn--bloque" href="#/agenda?dia=${j.fechas[0]}">${iconos.agenda}Vívelo en la agenda</a>
+    </article>
+    <h2 class="titulo-seccion">Eventos de la jornada</h2>
+    <div class="lista-enlaces">${eventos.map((e) => `
+      <a class="enlace-fila" href="#/evento/${e.id}">
+        <span class="avatar avatar--${categoria(e.categoria).color}">${iconos.agenda}</span>
+        <span><b>${e.nombre}</b><small>${j.fechas.length > 1 ? `${fechaLarga(e.fecha)} · ` : ''}${horaCompleta(e.hora)}</small></span>${iconos.flecha}
+      </a>`).join('')}</div>
+    <p class="nota">Contenido editorial de la edición ${datos.edicion}, actualizado el ${fechaActualizacion(datos.actualizado)}. Textos de redacción propia a partir de Corpocarnaval y la UNESCO.</p>`;
+}
+
+function montarCultura() {
+  const $j = document.getElementById('jornadas');
+  const $activa = $j.querySelector('[aria-current="true"]');
+  $j.scrollLeft = $activa.offsetLeft - ($j.clientWidth - $activa.offsetWidth) / 2;
+}
+
+// 08 Ajustes de accesibilidad (HU-07)
+const ESCALAS = [[1, 'Normal'], [1.15, 'Grande'], [1.3, 'Muy grande']];
+function pantallaAjustes() {
+  return `
+    ${barraSuperior('#/', 'Ajustes de accesibilidad')}
+    <h2 class="titulo-seccion">Tamaño de letra</h2>
+    <div class="opciones-escala" role="group" aria-label="Tamaño de letra">
+      ${ESCALAS.map(([v, n]) => `<button class="chip" data-escala="${v}" aria-pressed="${ajustes.escala === v}"><span style="font-size:${Math.round(14 * v)}px">Aa</span>${n}</button>`).join('')}
+    </div>
+    <h2 class="titulo-seccion">Contraste</h2>
+    <label class="interruptor panel">
+      <span><b>Contraste alto</b><small>Colores más oscuros y bordes marcados</small></span>
+      <input type="checkbox" role="switch" data-ajuste-contraste ${ajustes.contraste ? 'checked' : ''}>
+    </label>
+    <h2 class="titulo-seccion">Vista previa</h2>
+    ${tarjetaEvento(porId(datos.eventos, 'desfile-magno') ?? datos.eventos[0])}
+    <div class="aviso aviso--exito">${iconos.check}<span>Los cambios se aplican en todas las pantallas y se conservan al reabrir la app.</span></div>
+    <button class="btn btn--secundario btn--bloque restablecer" data-restablecer-ajustes>Restablecer valores</button>`;
+}
+
 // Aviso simulado: en la app nativa es una notificación local del sistema
 let temporizadorAviso = null;
 function mostrarAviso(ev, minutos) {
+  notificar(`#/evento/${ev.id}`, ev.nombre, `Empieza en ${textoAnticipacion(minutos)} · ${lugar(ev.lugar).nombre}`);
+}
+
+function notificar(href, titulo, texto) {
   let $n = document.getElementById('notificacion');
   if (!$n) {
     $n = document.createElement('a');
@@ -622,10 +801,10 @@ function mostrarAviso(ev, minutos) {
     $n.addEventListener('click', () => $n.classList.remove('notificacion--visible'));
     document.querySelector('.telefono').append($n);
   }
-  $n.href = `#/evento/${ev.id}`;
+  $n.href = href;
   $n.innerHTML = `
     <span class="notificacion-icono">${iconos.campana}</span>
-    <span><small>Carnaval de Negros y Blancos · ahora</small><b>${ev.nombre}</b>Empieza en ${textoAnticipacion(minutos)} · ${lugar(ev.lugar).nombre}</span>`;
+    <span><small>Carnaval de Negros y Blancos · ahora</small><b>${titulo}</b>${texto}</span>`;
   requestAnimationFrame(() => $n.classList.add('notificacion--visible'));
   clearTimeout(temporizadorAviso);
   temporizadorAviso = setTimeout(() => $n.classList.remove('notificacion--visible'), 6000);
@@ -647,6 +826,8 @@ const rutas = {
   colectivo: { pantalla: pantallaColectivo, pestaña: '#/agenda' },
   mapa: { pantalla: pantallaMapa, montar: montarMapa },
   favoritos: { pantalla: pantallaFavoritos, montar: montarFavoritos },
+  cultura: { pantalla: pantallaCultura, montar: montarCultura },
+  ajustes: { pantalla: pantallaAjustes, pestaña: '#/' },
   informacion: { pantalla: pantallaInformacion, pestaña: '#/' },
   movilidad: { pantalla: pantallaMovilidad, montar: montarMovilidad, pestaña: '#/' }
 };
@@ -675,7 +856,7 @@ function render() {
 }
 
 $pantalla.addEventListener('click', (e) => {
-  const el = e.target.closest('[data-fav], [data-dia], [data-filtro], #limpiar, [data-recordar], [data-atras], [data-capa-mapa], [data-desfile], [data-zoom], [data-ubicacion], [data-cerrar-tarjeta], .marca, .ruta, [data-actualizar], [data-dia-movilidad], [data-vista-favoritos], [data-anticipacion], [data-guardar-recordatorio], [data-editar-recordatorio], [data-probar-aviso]');
+  const el = e.target.closest('[data-fav], [data-dia], [data-filtro], #limpiar, [data-recordar], [data-atras], [data-capa-mapa], [data-desfile], [data-zoom], [data-ubicacion], [data-cerrar-tarjeta], .marca, .ruta, [data-actualizar], [data-dia-movilidad], [data-vista-favoritos], [data-anticipacion], [data-guardar-recordatorio], [data-editar-recordatorio], [data-probar-aviso], [data-visto], [data-simular-cambio], [data-restablecer-cambios], [data-leer-mas], [data-escala], [data-restablecer-ajustes]');
   if (!el) return;
 
   if (el.dataset.fav) {
@@ -685,6 +866,8 @@ $pantalla.addEventListener('click', (e) => {
       delete recordatorios[id];
       delete favs.edicion[id];
       guardarRecordatorios();
+      restablecerCambio(id);
+      guardarCambios();
     } else favoritos.add(id);
     guardarFavoritos();
     $pantalla.querySelectorAll(`[data-fav="${id}"]`).forEach((b) => b.setAttribute('aria-pressed', favoritos.has(id)));
@@ -706,6 +889,33 @@ $pantalla.addEventListener('click', (e) => {
     montarFavoritos();
   } else if (el.dataset.probarAviso) {
     mostrarAviso(porId(datos.eventos, el.dataset.probarAviso), recordatorios[el.dataset.probarAviso]);
+  } else if (el.dataset.visto) {
+    cambios[el.dataset.visto].visto = true;
+    guardarCambios();
+    if (rutaActual === 'favoritos') montarFavoritos();
+    else document.getElementById('aviso-detalle').innerHTML = '';
+  } else if (el.hasAttribute('data-simular-cambio')) {
+    simularCambio();
+    montarFavoritos();
+  } else if (el.hasAttribute('data-restablecer-cambios')) {
+    Object.keys(cambios).filter((id) => cambios[id].simulado).forEach(restablecerCambio);
+    guardarCambios();
+    textoBusqueda.clear();
+    montarFavoritos();
+  } else if (el.hasAttribute('data-leer-mas')) {
+    cultura.completo = !cultura.completo;
+    document.getElementById('texto-jornada').classList.toggle('texto-jornada--corto', !cultura.completo);
+    el.setAttribute('aria-expanded', cultura.completo);
+    el.textContent = cultura.completo ? 'Leer menos' : 'Leer más';
+  } else if (el.dataset.escala) {
+    ajustes.escala = Number(el.dataset.escala);
+    aplicarAjustes();
+    $pantalla.querySelectorAll('[data-escala]').forEach((b) => b.setAttribute('aria-pressed', Number(b.dataset.escala) === ajustes.escala));
+  } else if (el.hasAttribute('data-restablecer-ajustes')) {
+    Object.assign(ajustes, { escala: 1, contraste: false });
+    aplicarAjustes();
+    $pantalla.querySelectorAll('[data-escala]').forEach((b) => b.setAttribute('aria-pressed', Number(b.dataset.escala) === 1));
+    $pantalla.querySelector('[data-ajuste-contraste]').checked = false;
   } else if (el.dataset.dia) {
     agenda.dia = el.dataset.dia;
     agenda.texto = '';
@@ -772,6 +982,11 @@ $pantalla.addEventListener('keydown', (e) => {
 });
 
 $pantalla.addEventListener('change', (e) => {
+  if (e.target.hasAttribute('data-ajuste-contraste')) {
+    ajustes.contraste = e.target.checked;
+    aplicarAjustes();
+    return;
+  }
   const id = e.target.dataset.recordatorio;
   if (!id) return;
   if (e.target.checked) favs.edicion[id] = 30;
@@ -793,6 +1008,8 @@ async function iniciar() {
   $nav.innerHTML = pestañas.map((p) => `<a href="${p.ruta}">${iconos[p.icono]}${p.nombre}</a>`).join('');
   const respuesta = await fetch('data/edicion-2026.json');
   datos = await respuesta.json();
+  // Los cambios simulados en la prueba de laboratorio se conservan al reabrir
+  Object.entries(cambios).forEach(([id, c]) => { const ev = porId(datos.eventos, id); if (ev && c.simulado) Object.assign(ev, c.despues); });
   window.addEventListener('hashchange', render);
   ['online', 'offline'].forEach((ev) => window.addEventListener(ev, () => { if (rutaActual === 'informacion') render(); }));
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {});

@@ -301,3 +301,38 @@
 .notificacion small { display: block; color: var(--tinta-3); font-size: var(--t-xs); }
 .notificacion-icono { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--r-sm); background: var(--rojo); color: #fff; }
 .notificacion-icono svg { width: 20px; height: 20px; }
+
+/* 09 Aviso de cambio en favorito */
+.etiqueta--cambio { background: var(--amarillo); color: var(--tinta); }
+.etiqueta--cambio::before { display: none; }
+.aviso--cambio { background: var(--amarillo-suave); }
+.aviso--cambio svg { color: #A87700; }
+.aviso--cambio .btn--texto { display: block; min-height: 32px; margin-top: var(--e-1); padding: 0; font-size: var(--t-sm); }
+.favorito-cambio { padding: 0 var(--e-3) var(--e-3); }
+.simulacion { display: grid; gap: var(--e-2); margin-top: var(--e-4); border: 1.5px dashed var(--borde); box-shadow: none; background: none; }
+.simulacion p { margin: 0; font-size: var(--t-sm); color: var(--tinta-2); }
+.simulacion .btn { min-height: 44px; font-size: var(--t-sm); }
+
+/* 06 Cultura por jornada */
+.chip--enlace { display: inline-flex; align-items: center; text-decoration: none; }
+.chip--enlace[aria-current="true"] { background: var(--tinta); color: #fff; box-shadow: none; }
+.tarjeta-cultura { margin-top: var(--e-3); padding: var(--e-3); background: var(--superficie); border-radius: var(--r-xl); box-shadow: var(--sombra-1); }
+.tarjeta-cultura .cabecera-ilustrada { margin-bottom: var(--e-3); border-radius: var(--r-lg); }
+.tarjeta-cultura .titulo-detalle { margin: var(--e-2) 0 var(--e-1); font-size: var(--t-xl); }
+.etiquetas { display: flex; flex-wrap: wrap; gap: var(--e-2); }
+.fecha-jornada { display: flex; align-items: center; gap: 6px; margin: 0 0 var(--e-3); font-size: var(--t-sm); color: var(--tinta-2); }
+.fecha-jornada svg { width: 16px; height: 16px; flex: none; }
+.resumen-jornada { margin: 0 0 var(--e-2); font-weight: 600; }
+.texto-jornada--corto { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.tarjeta-cultura .btn--texto { padding: 0; margin-bottom: var(--e-2); }
+.enlace-jornada { display: flex; align-items: center; gap: var(--e-2); min-height: 40px; margin: var(--e-1) 0; padding: 0 var(--e-3); border-radius: var(--r-md); background: var(--verde-suave); color: var(--tinta); font-size: var(--t-sm); text-decoration: none; }
+.enlace-jornada svg { width: 18px; height: 18px; flex: none; color: var(--verde); }
+.enlace-jornada span { flex: 1; }
+
+/* 08 Ajustes de accesibilidad */
+.opciones-escala { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--e-2); }
+.opciones-escala .chip { display: grid; place-items: center; gap: 2px; min-height: 72px; padding: var(--e-2); border-radius: var(--r-md); }
+.opciones-escala .chip span { font-weight: 800; line-height: 1; }
+.interruptor.panel b { display: block; }
+.interruptor.panel small { display: block; font-size: var(--t-sm); color: var(--tinta-2); }
+.restablecer { margin-top: var(--e-4); }
