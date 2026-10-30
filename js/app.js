@@ -1,4 +1,5 @@
 import { iconos, ilustracion } from './icons.js';
+import { crearProyeccion, baseSvg, marcadorSvg, lineaSvg, activarGestos, COLOR_CAPA } from './mapa.js';
 
 const $pantalla = document.getElementById('pantalla');
 const $nav = document.getElementById('nav');
@@ -100,10 +101,16 @@ function pantallaInicio() {
           <b>${a.nombre}</b><small>${a.texto}</small>
         </a>`).join('')}
     </nav>
-    <a class="enlace-fila informacion" href="#/informacion">
-      <span class="avatar avatar--azul">${iconos.info}</span>
-      <span><b>Información práctica</b><small>Emergencias, salud y recomendaciones</small></span>${iconos.flecha}
-    </a>`;
+    <div class="lista-enlaces informacion">
+      <a class="enlace-fila" href="#/informacion">
+        <span class="avatar avatar--azul">${iconos.info}</span>
+        <span><b>Información práctica</b><small>Emergencias, salud y normas, sin conexión</small></span>${iconos.flecha}
+      </a>
+      <a class="enlace-fila" href="#/movilidad">
+        <span class="avatar avatar--verde">${iconos.ruta}</span>
+        <span><b>Cómo moverse</b><small>Cierres y restricciones de cada día</small></span>${iconos.flecha}
+      </a>
+    </div>`;
 }
 
 // 01 Agenda por días (HU-02, HU-03, HU-04)
@@ -189,7 +196,7 @@ function pantallaEvento([id]) {
       ${ev.finalizacion ? dato('bandera', 'Finalización', ev.finalizacion) : ''}
     </div>
     <div class="acciones">
-      <a class="btn btn--secundario" href="#/mapa?lugar=${ev.lugar}">${iconos.mapa}Ver en mapa</a>
+      <a class="btn btn--secundario" href="#/mapa?evento=${ev.id}">${iconos.mapa}Ver en mapa</a>
       <button class="btn" data-recordar="${ev.id}">${iconos.campana}Recordarme</button>
     </div>
     <div id="aviso-detalle" aria-live="polite"></div>
@@ -234,6 +241,258 @@ function pantallaColectivo([id]) {
       </a>`).join('')}</div>`;
 }
 
+// 03 Mapa (HU-10, HU-11, HU-12)
+const mapa = { capas: { desfile: true, eventos: true, salud: true, servicios: true }, desfile: null, seleccion: null, base: null, k: 1, gestos: null };
+const NOMBRE_CAPA = { desfile: 'Desfile', eventos: 'Eventos', salud: 'Salud', servicios: 'Servicios' };
+const nombreCorto = (ev) => ev.nombre.replace(/^(Desfile de |Llegada de la )/, '');
+const comoLlegar = (lat, lon) => `<a class="btn btn--secundario" href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}" target="_blank" rel="noopener">${iconos.ruta}Cómo llegar</a>`;
+
+function pantallaMapa(_, params) {
+  if (params.get('evento')) {
+    const ev = porId(datos.eventos, params.get('evento'));
+    const rec = datos.recorridos.find((r) => r.evento === ev?.id);
+    if (rec) { mapa.desfile = rec.evento; mapa.capas.desfile = true; mapa.seleccion = { tipo: 'recorrido', id: rec.evento }; }
+    else if (ev) { mapa.capas.eventos = true; mapa.seleccion = { tipo: 'lugar', id: ev.lugar }; }
+  } else if (params.get('punto')) {
+    const p = porId(datos.puntos, params.get('punto'));
+    if (p) { mapa.capas[p.capa] = true; mapa.seleccion = { tipo: 'punto', id: p.id }; }
+  }
+  return `
+    <header class="encabezado encabezado--fila">
+      <div><h1>Mapa</h1><p class="sub">Centro de Pasto y Senda del Carnaval</p></div>
+      <span class="insignia">${iconos.check}Disponible sin conexión</span>
+    </header>
+    <div class="fila-chips" role="group" aria-label="Capas del mapa">
+      ${Object.keys(mapa.capas).map((c) => `<button class="chip chip--capa" data-capa-mapa="${c}" aria-pressed="${mapa.capas[c]}"><i style="background:${COLOR_CAPA[c]}"></i>${NOMBRE_CAPA[c]}</button>`).join('')}
+    </div>
+    <div class="fila-chips" role="group" aria-label="Recorrido del desfile">
+      ${datos.recorridos.map((r) => { const ev = porId(datos.eventos, r.evento); return `<button class="chip" data-desfile="${r.evento}" aria-pressed="${mapa.desfile === r.evento}">${nombreCorto(ev)} · ${datos.dias.find((d) => d.fecha === ev.fecha).etiqueta}</button>`; }).join('')}
+    </div>
+    <div class="mapa" id="mapa">
+      <svg id="mapa-svg" class="mapa-svg" role="img" aria-label="Mapa del centro de Pasto"></svg>
+      <div class="mapa-controles">
+        <button class="btn-icono" data-zoom="0.7" aria-label="Acercar">${iconos.mas}</button>
+        <button class="btn-icono" data-zoom="1.4" aria-label="Alejar">${iconos.menos}</button>
+        <button class="btn-icono" data-ubicacion aria-label="Mi ubicación">${iconos.ubicacion}</button>
+      </div>
+      <small class="mapa-atribucion">© colaboradores de OpenStreetMap</small>
+      <div id="mapa-tarjeta" class="mapa-tarjeta" aria-live="polite"></div>
+    </div>`;
+}
+
+async function montarMapa() {
+  if (!mapa.base) mapa.base = await (await fetch('data/mapa-pasto.json')).json();
+  const svg = document.getElementById('mapa-svg');
+  if (!svg) return;
+  const proy = crearProyeccion(mapa.base);
+  svg.innerHTML = `${baseSvg(mapa.base)}<g id="capa-recorrido"></g><g id="capa-marcas"></g><g id="capa-yo"></g>`;
+  mapa.gestos = activarGestos(svg, mapa.base, (k) => {
+    mapa.k = k;
+    svg.style.setProperty('--k', k);
+    svg.classList.toggle('mapa-svg--cerca', k < 1.3);
+  });
+  dibujarMapa();
+  const rec = datos.recorridos.find((r) => r.evento === mapa.desfile) ?? datos.recorridos[0];
+  const sel = mapa.seleccion;
+  if (sel?.tipo === 'lugar' || sel?.tipo === 'punto') {
+    const p = sel.tipo === 'lugar' ? lugar(sel.id) : porId(datos.puntos, sel.id);
+    if (p?.lat) { const [x, y] = proy(p.lat, p.lon); mapa.gestos.encuadrar([x - 90, y - 120, x + 90, y + 60], 0); }
+    else mapa.gestos.encuadrar(cajaDe(rec.trazado));
+  } else {
+    mapa.gestos.encuadrar(cajaDe(rec.trazado));
+  }
+  mostrarTarjeta();
+}
+
+const cajaDe = (trazado) => {
+  const proy = crearProyeccion(mapa.base);
+  const xy = trazado.map(([la, lo]) => proy(la, lo));
+  return [Math.min(...xy.map((p) => p[0])), Math.min(...xy.map((p) => p[1])), Math.max(...xy.map((p) => p[0])), Math.max(...xy.map((p) => p[1]))];
+};
+
+function dibujarMapa() {
+  const proy = crearProyeccion(mapa.base);
+  const $rec = document.getElementById('capa-recorrido');
+  const $marcas = document.getElementById('capa-marcas');
+  if (!$rec) return;
+
+  let rutas = '';
+  if (mapa.capas.desfile) {
+    const rec = datos.recorridos.find((r) => r.evento === mapa.desfile);
+    const trazado = rec ? rec.trazado : datos.recorridos.reduce((a, r) => (r.trazado.length > a.length ? r.trazado : a), []);
+    const d = lineaSvg(proy, trazado);
+    rutas = `<path d="${d}" class="ruta-borde" vector-effect="non-scaling-stroke"/>
+      <path d="${d}" class="ruta ${rec ? '' : 'ruta--suave'}" vector-effect="non-scaling-stroke" data-recorrido="${rec?.evento ?? ''}"/>`;
+    if (rec) {
+      const [xa, ya] = proy(rec.concentracion.lat, rec.concentracion.lon);
+      const [xb, yb] = proy(rec.finalizacion.lat, rec.finalizacion.lon);
+      rutas += `<g transform="translate(${xa.toFixed(1)} ${ya.toFixed(1)})"><g class="marca-escala"><circle r="11" fill="#2EAD68" stroke="#fff" stroke-width="3"/><text class="ruta-letra" y="4.5">S</text></g></g>
+        <g transform="translate(${xb.toFixed(1)} ${yb.toFixed(1)})"><g class="marca-escala"><circle r="11" fill="#1F1A17" stroke="#fff" stroke-width="3"/><text class="ruta-letra" y="4.5">L</text></g></g>`;
+    }
+  }
+  $rec.innerHTML = rutas;
+
+  let marcas = '';
+  if (mapa.capas.eventos) {
+    datos.lugares.filter((l) => l.lat && l.id !== 'senda' && datos.eventos.some((e) => e.lugar === l.id)).forEach((l) => {
+      const [x, y] = proy(l.lat, l.lon);
+      marcas += marcadorSvg('eventos', `lugar:${l.id}`, x, y, l.nombre);
+    });
+  }
+  datos.puntos.filter((p) => mapa.capas[p.capa]).forEach((p) => {
+    const [x, y] = proy(p.lat, p.lon);
+    marcas += marcadorSvg(p.capa, `punto:${p.id}`, x, y, p.nombre);
+  });
+  $marcas.innerHTML = marcas;
+  const sel = mapa.seleccion;
+  if (sel) $marcas.querySelector(`[data-punto="${sel.tipo === 'lugar' ? 'lugar' : 'punto'}:${sel.id}"]`)?.classList.add('marca--activa');
+}
+
+function mostrarTarjeta() {
+  const $t = document.getElementById('mapa-tarjeta');
+  if (!$t) return;
+  const sel = mapa.seleccion;
+  const cerrar = `<button class="btn-icono tarjeta-cerrar" data-cerrar-tarjeta aria-label="Cerrar">${iconos.cerrar}</button>`;
+  if (!sel) { $t.innerHTML = ''; return; }
+  let html = '';
+  if (sel.tipo === 'recorrido') {
+    const rec = datos.recorridos.find((r) => r.evento === sel.id);
+    const ev = porId(datos.eventos, rec.evento);
+    html = `<span class="etiqueta etiqueta--rojo">Recorrido · ${fechaLarga(ev.fecha)}</span><h3>${ev.nombre}</h3>
+      <p><b>Salida (S):</b> ${rec.concentracion.nombre}, desde las ${horaCompleta(ev.hora)}<br><b>Llegada (L):</b> ${rec.finalizacion.nombre}</p>
+      <div class="acciones"><a class="btn btn--secundario" href="#/movilidad?dia=${ev.fecha}">${iconos.ruta}Movilidad</a><a class="btn" href="#/evento/${ev.id}">Ver detalle</a></div>`;
+  } else if (sel.tipo === 'lugar') {
+    const l = lugar(sel.id);
+    const eventos = datos.eventos.filter((e) => e.lugar === l.id);
+    html = l.lat
+      ? `<span class="etiqueta etiqueta--azul">Eventos</span><h3>${l.nombre}</h3><p>${l.direccion}</p>
+        <div class="lista-mini">${eventos.slice(0, 3).map((e) => `<a href="#/evento/${e.id}">${e.nombre}<small>${fechaLarga(e.fecha)} · ${horaCompleta(e.hora)}</small></a>`).join('')}${eventos.length > 3 ? `<small>y ${eventos.length - 3} eventos más en la agenda</small>` : ''}</div>
+        <div class="acciones acciones--una">${comoLlegar(l.lat, l.lon)}</div>`
+      : `<span class="etiqueta etiqueta--azul">Eventos</span><h3>${l.nombre}</h3><p>Este evento se realiza en varios sectores (${l.direccion}), así que no tiene un punto único en el mapa.</p>`;
+  } else if (sel.tipo === 'punto') {
+    const p = porId(datos.puntos, sel.id);
+    const color = p.capa === 'salud' ? 'verde' : 'amarillo';
+    html = `<span class="etiqueta etiqueta--${color}">${p.tipo}</span><h3>${p.nombre}</h3><p class="fuente">Ubicación: ${p.fuente}</p>
+      <div class="acciones ${p.telefono ? '' : 'acciones--una'}">${p.telefono ? `<a class="btn" href="tel:${p.telefono}">${iconos.telefono}Llamar al ${p.telefono}</a>` : ''}${comoLlegar(p.lat, p.lon)}</div>`;
+  } else if (sel.tipo === 'aviso') {
+    html = `<p>${sel.texto}</p>`;
+  }
+  $t.innerHTML = `<div class="tarjeta-mapa">${cerrar}${html}</div>`;
+}
+
+function ubicarme() {
+  const aviso = (texto) => { mapa.seleccion = { tipo: 'aviso', texto }; mostrarTarjeta(); };
+  if (!navigator.geolocation) return aviso('Este navegador no permite conocer tu ubicación.');
+  navigator.geolocation.getCurrentPosition((pos) => {
+    const { latitude: la, longitude: lo } = pos.coords;
+    const [lo0, la0, lo1, la1] = mapa.base.bbox;
+    if (la < la0 || la > la1 || lo < lo0 || lo > lo1) return aviso('Tu ubicación está fuera del área del mapa (centro de Pasto).');
+    const [x, y] = crearProyeccion(mapa.base)(la, lo);
+    document.getElementById('capa-yo').innerHTML = `<g transform="translate(${x} ${y})"><g class="marca-escala"><circle r="14" fill="#008EC4" opacity=".2"/><circle r="7" fill="#008EC4" stroke="#fff" stroke-width="3"/></g></g>`;
+    mapa.gestos.encuadrar([x - 100, y - 100, x + 100, y + 100], 0);
+  }, () => aviso('No se pudo obtener tu ubicación. Revisa el permiso del navegador.'), { timeout: 8000 });
+}
+
+// 04 Información práctica sin conexión (HU-08, HU-09, HU-13)
+const fechaActualizacion = (iso) => new Date(iso).toLocaleDateString('es-CO', { day: 'numeric', month: 'long' });
+function pantallaInformacion() {
+  const ip = datos.informacionPractica;
+  const conectado = navigator.onLine;
+  return `
+    ${barraSuperior('#/', 'Información práctica')}
+    <div class="aviso ${conectado ? 'aviso--exito' : ''}">${conectado ? iconos.check : iconos.sinConexion}
+      <span>${conectado ? 'Esta información queda guardada en el celular y se puede consultar sin conexión.' : `Estás sin conexión. Se muestra la información guardada el ${fechaActualizacion(datos.actualizado)}.`}</span>
+    </div>
+    <section class="panel paquete">
+      <div><b>Edición ${datos.edicion}</b><small>Versión ${datos.version} · actualizada el ${fechaActualizacion(datos.actualizado)}</small></div>
+      <button class="btn btn--secundario" data-actualizar>${iconos.recargar}Buscar actualización</button>
+      <div id="estado-actualizacion" aria-live="polite"></div>
+    </section>
+    <h2 class="titulo-seccion">Emergencias</h2>
+    <a class="btn btn--bloque btn--emergencia" href="tel:123">${iconos.telefono}Llamar al 123</a>
+    <ul class="lista-participantes lista-telefonos">
+      ${ip.emergencias.map((e) => `<li><span>${e.nombre}</span><a href="tel:${e.numero}">${iconos.telefono}${e.numero}</a></li>`).join('')}
+    </ul>
+    <h2 class="titulo-seccion">Salud cerca de la Senda</h2>
+    <div class="lista-enlaces">${datos.puntos.filter((p) => p.capa === 'salud').map((p) => `
+      <a class="enlace-fila" href="#/mapa?punto=${p.id}">
+        <span class="avatar avatar--verde">${iconos.salud}</span>
+        <span><b>${p.nombre}</b><small>${p.tipo} · Ver en el mapa</small></span>${iconos.flecha}
+      </a>`).join('')}</div>
+    <h2 class="titulo-seccion">Normas del Carnaval</h2>
+    <div class="lista-enlaces">${ip.normas.map((n) => `
+      <div class="tarjeta-norma"><b>${n.titulo}</b><p>${n.texto}</p><small>${n.fuente}</small></div>`).join('')}</div>
+    <h2 class="titulo-seccion">Recomendaciones</h2>
+    <ul class="lista-recomendaciones">${ip.recomendaciones.map((r) => `<li>${r.texto}<small>${r.fuente}</small></li>`).join('')}</ul>
+    <a class="enlace-fila informacion" href="#/movilidad">
+      <span class="avatar avatar--verde">${iconos.ruta}</span>
+      <span><b>Cómo moverse</b><small>Cierres y restricciones de cada día</small></span>${iconos.flecha}
+    </a>`;
+}
+
+async function buscarActualizacion(boton) {
+  const $estado = document.getElementById('estado-actualizacion');
+  boton.disabled = true;
+  try {
+    if (!navigator.onLine) throw new Error('sin conexión');
+    const nuevos = await (await fetch('data/edicion-2026.json', { cache: 'no-store' })).json();
+    if (nuevos.version !== datos.version) {
+      datos = nuevos;
+      textoBusqueda.clear();
+      $estado.innerHTML = `<div class="aviso aviso--exito">${iconos.check}<span>Se descargó la versión ${datos.version}.</span></div>`;
+    } else {
+      $estado.innerHTML = `<div class="aviso aviso--exito">${iconos.check}<span>Ya tienes la versión más reciente (${datos.version}).</span></div>`;
+    }
+  } catch {
+    $estado.innerHTML = `<div class="aviso">${iconos.sinConexion}<span>Sin conexión. Sigues viendo la información guardada; busca la actualización cuando tengas señal.</span></div>`;
+  }
+  boton.disabled = false;
+}
+
+// 10 Cómo moverse (HU-14)
+const movilidad = { dia: null };
+function pantallaMovilidad(_, params) {
+  if (params.get('dia')) movilidad.dia = params.get('dia');
+  movilidad.dia ??= datos.dias[0].fecha;
+  return `
+    ${barraSuperior('#/informacion', 'Cómo moverse')}
+    <p class="texto">Cierres por los desfiles y restricciones de tránsito de cada día del Carnaval.</p>
+    <div class="fila-chips" id="dias-movilidad" role="group" aria-label="Día">
+      ${datos.dias.map((d) => `<button class="chip-dia" data-dia-movilidad="${d.fecha}" aria-pressed="${d.fecha === movilidad.dia}"><small>${d.dia}</small><b>${d.etiqueta.split(' ')[0]}</b><small>${d.etiqueta.split(' ')[1]}</small></button>`).join('')}
+    </div>
+    <div id="movilidad-dia"></div>`;
+}
+
+function montarMovilidad() {
+  const fecha = movilidad.dia;
+  $pantalla.querySelectorAll('[data-dia-movilidad]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.diaMovilidad === fecha));
+  const $dias = document.getElementById('dias-movilidad');
+  const $activo = $dias.querySelector('[aria-pressed="true"]');
+  $dias.scrollLeft = $activo.offsetLeft - ($dias.clientWidth - $activo.offsetWidth) / 2;
+
+  const desfiles = datos.eventos.filter((e) => e.fecha === fecha && e.concentracion);
+  const restricciones = datos.movilidad.restricciones.filter((r) => r.fechas.includes(fecha));
+  const cierres = desfiles.map((ev) => {
+    const rec = datos.recorridos.find((r) => r.evento === ev.id);
+    return `
+      <article class="tarjeta-cierre">
+        <span class="etiqueta etiqueta--rojo">Vía cerrada · desde las ${horaCompleta(ev.hora)}</span>
+        <h3>${ev.nombre}</h3>
+        <p>${ev.concentracion === ev.finalizacion ? `Salida y llegada: ${ev.concentracion}` : `De ${ev.concentracion} a ${ev.finalizacion}`}</p>
+        ${rec ? `<div class="calles">${rec.calles.map((c) => `<span>${c}</span>`).join('')}</div>
+          <a class="btn btn--secundario btn--bloque" href="#/mapa?evento=${ev.id}">${iconos.mapa}Ver el recorrido en el mapa</a>` : ''}
+      </article>`;
+  }).join('');
+  document.getElementById('movilidad-dia').innerHTML = `
+    <h2 class="titulo-seccion">Vías cerradas</h2>
+    ${cierres || '<p class="texto">La programación oficial no tiene desfiles por la Senda este día.</p>'}
+    <h2 class="titulo-seccion">Restricciones de tránsito</h2>
+    ${restricciones.length ? restricciones.map((r) => `<div class="tarjeta-norma"><p>${r.texto}</p><small>${r.fuente}</small></div>`).join('') : '<p class="texto">No hay restricciones especiales publicadas para este día.</p>'}
+    <h2 class="titulo-seccion">Rutas habilitadas</h2>
+    <div class="tarjeta-norma"><p>Usa vías que no formen parte del recorrido. Por los cierres, muévete con tiempo o en transporte público.</p><small>RCN Radio, 2026</small></div>
+    <p class="nota">El cierre exacto de cada vía y los desvíos los define la Secretaría de Tránsito y Transporte de Pasto.</p>`;
+}
+
 function noEncontrado() {
   return `<div class="vacio">${iconos.info}<p>No encontramos esta información.</p><a class="btn btn--secundario" href="#/agenda">Ir a la agenda</a></div>`;
 }
@@ -247,7 +506,10 @@ const rutas = {
   '': { pantalla: pantallaInicio },
   agenda: { pantalla: pantallaAgenda, montar: montarAgenda },
   evento: { pantalla: pantallaEvento, pestaña: '#/agenda' },
-  colectivo: { pantalla: pantallaColectivo, pestaña: '#/agenda' }
+  colectivo: { pantalla: pantallaColectivo, pestaña: '#/agenda' },
+  mapa: { pantalla: pantallaMapa, montar: montarMapa },
+  informacion: { pantalla: pantallaInformacion, pestaña: '#/' },
+  movilidad: { pantalla: pantallaMovilidad, montar: montarMovilidad, pestaña: '#/' }
 };
 
 const pila = [];
@@ -274,7 +536,7 @@ function render() {
 }
 
 $pantalla.addEventListener('click', (e) => {
-  const el = e.target.closest('[data-fav], [data-dia], [data-filtro], #limpiar, [data-recordar], [data-atras]');
+  const el = e.target.closest('[data-fav], [data-dia], [data-filtro], #limpiar, [data-recordar], [data-atras], [data-capa-mapa], [data-desfile], [data-zoom], [data-ubicacion], [data-cerrar-tarjeta], .marca, .ruta, [data-actualizar], [data-dia-movilidad]');
   if (!el) return;
 
   if (el.dataset.fav) {
@@ -299,10 +561,52 @@ $pantalla.addEventListener('click', (e) => {
     guardarFavoritos();
     $pantalla.querySelectorAll(`[data-fav="${el.dataset.recordar}"]`).forEach((b) => b.setAttribute('aria-pressed', 'true'));
     document.getElementById('aviso-detalle').innerHTML = `<div class="aviso aviso--exito">${iconos.check}<span>Guardado en favoritos. Elige cuándo avisarte en <a href="#/favoritos">Favoritos</a>.</span></div>`;
+  } else if (el.dataset.capaMapa) {
+    mapa.capas[el.dataset.capaMapa] = !mapa.capas[el.dataset.capaMapa];
+    el.setAttribute('aria-pressed', mapa.capas[el.dataset.capaMapa]);
+    dibujarMapa();
+  } else if (el.dataset.desfile) {
+    const igual = mapa.desfile === el.dataset.desfile;
+    mapa.desfile = igual ? null : el.dataset.desfile;
+    mapa.capas.desfile = true;
+    $pantalla.querySelector('[data-capa-mapa="desfile"]').setAttribute('aria-pressed', 'true');
+    $pantalla.querySelectorAll('[data-desfile]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.desfile === mapa.desfile));
+    mapa.seleccion = mapa.desfile ? { tipo: 'recorrido', id: mapa.desfile } : null;
+    dibujarMapa();
+    mostrarTarjeta();
+    if (mapa.desfile) mapa.gestos.encuadrar(cajaDe(datos.recorridos.find((r) => r.evento === mapa.desfile).trazado));
+  } else if (el.dataset.zoom) {
+    mapa.gestos?.zoom(Number(el.dataset.zoom));
+  } else if (el.hasAttribute('data-ubicacion')) {
+    ubicarme();
+  } else if (el.hasAttribute('data-cerrar-tarjeta')) {
+    mapa.seleccion = null;
+    mostrarTarjeta();
+    dibujarMapa();
+  } else if (el.classList.contains('marca') || el.classList.contains('ruta')) {
+    if (mapa.gestos?.fueArrastre()) return;
+    if (el.classList.contains('ruta')) {
+      if (!el.dataset.recorrido) return;
+      mapa.seleccion = { tipo: 'recorrido', id: el.dataset.recorrido };
+    } else {
+      const [tipo, id] = el.dataset.punto.split(':');
+      mapa.seleccion = { tipo: tipo === 'lugar' ? 'lugar' : 'punto', id };
+    }
+    dibujarMapa();
+    mostrarTarjeta();
+  } else if (el.hasAttribute('data-actualizar')) {
+    buscarActualizacion(el);
+  } else if (el.dataset.diaMovilidad) {
+    movilidad.dia = el.dataset.diaMovilidad;
+    montarMovilidad();
   } else if (el.hasAttribute('data-atras') && pila.length > 1) {
     e.preventDefault();
     history.back();
   }
+});
+
+$pantalla.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && e.target.classList.contains('marca')) e.target.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 });
 
 $pantalla.addEventListener('input', (e) => {
@@ -316,6 +620,8 @@ async function iniciar() {
   const respuesta = await fetch('data/edicion-2026.json');
   datos = await respuesta.json();
   window.addEventListener('hashchange', render);
+  ['online', 'offline'].forEach((ev) => window.addEventListener(ev, () => { if (rutaActual === 'informacion') render(); }));
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
   render();
 }
 
