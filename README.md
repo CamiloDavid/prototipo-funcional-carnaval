@@ -21,3 +21,7 @@ En el computador la app aparece dentro de un marco de celular; en el celular ocu
 ## Fuentes del contenido
 
 Programación oficial de la edición 2026 publicada por la Alcaldía de Pasto y la Corporación del Carnaval de Negros y Blancos (Corpocarnaval). Los textos culturales son de redacción propia. Las ilustraciones e íconos son propios.
+
+Recorridos de los desfiles: mapa oficial de la Senda del Carnaval (Corpocarnaval). Mapa base, lugares y puntos de salud y servicios: © colaboradores de OpenStreetMap (licencia ODbL). Normas y recomendaciones: decretos de la Alcaldía de Pasto, Pasto Salud ESE y RCN Radio, citados en la app.
+
+La app funciona sin conexión después de la primera visita y se puede agregar a la pantalla de inicio del celular.
