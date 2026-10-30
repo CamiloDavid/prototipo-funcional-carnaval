@@ -58,6 +58,8 @@ a { color: var(--azul); }
   .pantalla { padding-top: var(--e-3); }
 }
 
+[hidden] { display: none !important; }
+
 .oculto-visual {
   position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
 }
