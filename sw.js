@@ -1,6 +1,6 @@
 // Guarda la app en el celular para usarla sin conexión (HU-08).
-// Los datos de la edición se buscan primero en la red, para tener la versión más reciente (HU-09).
-const CACHE = 'cnb-v2';
+// Siempre se busca primero la versión publicada, para que el celular no se quede con una anterior (HU-09).
+const CACHE = 'cnb-v3';
 const ARCHIVOS = [
   './', 'index.html', 'manifest.webmanifest',
   'css/tokens.css', 'css/base.css', 'css/components.css',
@@ -13,7 +13,9 @@ const ARCHIVOS = [
 ];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ARCHIVOS)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE)
+    .then((c) => c.addAll(ARCHIVOS.map((u) => new Request(u, { cache: 'reload' }))))
+    .then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (e) => {
@@ -22,26 +24,16 @@ self.addEventListener('activate', (e) => {
     .then(() => self.clients.claim()));
 });
 
+// Red primero (con límite de 5 s, por la señal débil en los desfiles); sin señal, lo guardado
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== location.origin) return;
-
-  if (url.pathname.endsWith('/data/edicion-2026.json')) {
-    // Red primero; sin señal, lo guardado
-    e.respondWith(fetch(e.request).then((r) => {
-      const copia = r.clone();
-      caches.open(CACHE).then((c) => c.put('data/edicion-2026.json', copia));
-      return r;
-    }).catch(() => caches.match('data/edicion-2026.json')));
-    return;
-  }
-
-  // Lo guardado primero, y se renueva en segundo plano
-  e.respondWith(caches.match(e.request, { ignoreSearch: true }).then((guardado) => {
-    const red = fetch(e.request).then((r) => {
-      if (r.ok) { const copia = r.clone(); caches.open(CACHE).then((c) => c.put(e.request, copia)); }
-      return r;
-    }).catch(() => guardado);
-    return guardado || red;
-  }));
+  const guardado = () => caches.match(e.request, { ignoreSearch: true })
+    .then((r) => r || (e.request.mode === 'navigate' ? caches.match('index.html') : Response.error()));
+  const red = fetch(e.request, { cache: 'no-cache' }).then((r) => {
+    if (r.ok) { const copia = r.clone(); caches.open(CACHE).then((c) => c.put(e.request, copia)); }
+    return r;
+  });
+  const limite = new Promise((ok) => setTimeout(ok, 5000)).then(() => caches.match(e.request, { ignoreSearch: true }));
+  e.respondWith(Promise.race([red, limite]).then((r) => r || red).catch(guardado));
 });

@@ -281,7 +281,13 @@ function pantallaMapa(_, params) {
 }
 
 async function montarMapa() {
-  if (!mapa.base) mapa.base = await (await fetch('data/mapa-pasto.json')).json();
+  try {
+    if (!mapa.base) mapa.base = await (await fetch('data/mapa-pasto.json')).json();
+  } catch {
+    const $t = document.getElementById('mapa-tarjeta');
+    if ($t) $t.innerHTML = '<div class="tarjeta-mapa"><p>No se pudo cargar el mapa. Abre la app una vez con conexión para guardarlo en el celular.</p></div>';
+    return;
+  }
   const svg = document.getElementById('mapa-svg');
   if (!svg) return;
   const proy = crearProyeccion(mapa.base);
@@ -621,7 +627,7 @@ async function iniciar() {
   datos = await respuesta.json();
   window.addEventListener('hashchange', render);
   ['online', 'offline'].forEach((ev) => window.addEventListener(ev, () => { if (rutaActual === 'informacion') render(); }));
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {});
   render();
 }
 
