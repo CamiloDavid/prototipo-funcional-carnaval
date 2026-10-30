@@ -26,6 +26,13 @@ function guardarFavoritos() {
   try { localStorage.setItem(CLAVE_FAVORITOS, JSON.stringify([...favoritos])); } catch { /* sin almacenamiento */ }
 }
 
+// Recordatorios: minutos de anticipación por evento favorito (HU-16)
+const CLAVE_RECORDATORIOS = 'cnb-recordatorios';
+const recordatorios = leer(CLAVE_RECORDATORIOS, {});
+function guardarRecordatorios() {
+  try { localStorage.setItem(CLAVE_RECORDATORIOS, JSON.stringify(recordatorios)); } catch { /* sin almacenamiento */ }
+}
+
 // Utilidades
 const porId = (lista, id) => lista.find((x) => x.id === id);
 const categoria = (id) => porId(datos.categorias, id);
@@ -499,6 +506,131 @@ function montarMovilidad() {
     <p class="nota">El cierre exacto de cada vía y los desvíos los define la Secretaría de Tránsito y Transporte de Pasto.</p>`;
 }
 
+// 05 Favoritos y recordatorio (HU-15, HU-16)
+const favs = { vista: 'proximos', edicion: {}, destacado: null };
+const ANTICIPACION = [15, 30, 60];
+const textoAnticipacion = (m) => (m === 60 ? '1 hora' : `${m} min`);
+
+// Las fechas se muestran sin año: cada evento se ubica en el Carnaval en curso o en el próximo
+function fechaEnTemporada(ev) {
+  const hoy = new Date();
+  const inicio = hoy.getMonth() === 0 && hoy.getDate() <= 7 ? hoy.getFullYear() - 1 : hoy.getFullYear();
+  const [, mes, dia] = ev.fecha.split('-').map(Number);
+  const [hh, mm] = (ev.hora ?? '00:00').split(':').map(Number);
+  return new Date(mes === 12 ? inicio : inicio + 1, mes - 1, dia, hh, mm);
+}
+
+function momentoAviso(ev, minutos) {
+  // Se calcula con la fecha de la programación, para que el día de la semana coincida con la agenda
+  const [a, m, d] = ev.fecha.split('-').map(Number);
+  const [hh, mm] = (ev.hora ?? '00:00').split(':').map(Number);
+  const t = new Date(a, m - 1, d, hh, mm - minutos);
+  const dos = (n) => String(n).padStart(2, '0');
+  const fecha = `${t.getFullYear()}-${dos(t.getMonth() + 1)}-${dos(t.getDate())}`;
+  const dia = datos.dias.some((x) => x.fecha === fecha)
+    ? fechaLarga(fecha).toLowerCase()
+    : t.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' }).replace(',', '');
+  return `el ${dia} a las ${horaCompleta(`${dos(t.getHours())}:${dos(t.getMinutes())}`)}`;
+}
+
+function pantallaFavoritos(_, params) {
+  favs.destacado = params.get('evento');
+  if (favs.destacado && favoritos.has(favs.destacado) && recordatorios[favs.destacado] == null) favs.edicion[favs.destacado] ??= 30;
+  return `
+    <header class="encabezado"><div><h1>Mis favoritos</h1><p class="sub" id="conteo-favoritos"></p></div></header>
+    <div class="aviso">${iconos.sinConexion}<span>Los recordatorios quedan programados en el celular y llegan aunque no tengas conexión.</span></div>
+    <div class="fila-chips vistas-favoritos" role="group" aria-label="Eventos guardados">
+      <button class="chip" data-vista-favoritos="proximos"></button><button class="chip" data-vista-favoritos="pasados"></button>
+    </div>
+    <div id="lista-favoritos"></div>`;
+}
+
+function bloqueRecordatorio(ev) {
+  if (fechaEnTemporada(ev) < new Date()) return '<p class="recordatorio-estado">Este evento ya pasó.</p>';
+  const guardado = recordatorios[ev.id];
+  const borrador = favs.edicion[ev.id];
+  const activo = guardado != null || borrador != null;
+  let cuerpo = '';
+  if (borrador != null) {
+    cuerpo = `
+      <div class="fila-chips" role="group" aria-label="Avisarme antes">
+        ${ANTICIPACION.map((m) => `<button class="chip" data-anticipacion="${ev.id}" data-minutos="${m}" aria-pressed="${m === borrador}">${textoAnticipacion(m)} antes</button>`).join('')}
+      </div>
+      <button class="btn btn--bloque" data-guardar-recordatorio="${ev.id}">${iconos.campana}Guardar recordatorio</button>`;
+  } else if (guardado != null) {
+    cuerpo = `
+      <div class="aviso aviso--exito">${iconos.check}<span>Recordatorio guardado: te avisaremos ${momentoAviso(ev, guardado)} (${textoAnticipacion(guardado)} antes).</span></div>
+      <div class="recordatorio-acciones">
+        <button class="btn btn--texto" data-editar-recordatorio="${ev.id}">Cambiar anticipación</button>
+        <button class="btn btn--texto" data-probar-aviso="${ev.id}">${iconos.campana}Probar aviso</button>
+      </div>`;
+  }
+  return `
+    <div class="recordatorio">
+      <label class="interruptor">
+        <span><b>Recordarme</b><small>${guardado != null ? `${textoAnticipacion(guardado)} antes` : activo ? 'Elige con cuánta anticipación' : 'Desactivado'}</small></span>
+        <input type="checkbox" role="switch" data-recordatorio="${ev.id}" ${activo ? 'checked' : ''}>
+      </label>
+      ${cuerpo}
+    </div>`;
+}
+
+function montarFavoritos() {
+  const ahora = new Date();
+  const lista = datos.eventos.filter((e) => favoritos.has(e.id)).sort((a, b) => (a.fecha + a.hora).localeCompare(b.fecha + b.hora));
+  const pasados = lista.filter((e) => fechaEnTemporada(e) < ahora);
+  const proximos = lista.filter((e) => !pasados.includes(e));
+  if (favs.destacado && pasados.some((e) => e.id === favs.destacado)) favs.vista = 'pasados';
+  const visibles = favs.vista === 'pasados' ? pasados : proximos;
+
+  document.getElementById('conteo-favoritos').textContent = `${lista.length} ${lista.length === 1 ? 'evento guardado' : 'eventos guardados'}`;
+  $pantalla.querySelectorAll('[data-vista-favoritos]').forEach((b) => {
+    const n = b.dataset.vistaFavoritos === 'pasados' ? pasados.length : proximos.length;
+    b.textContent = `${b.dataset.vistaFavoritos === 'pasados' ? 'Pasados' : 'Próximos'} (${n})`;
+    b.setAttribute('aria-pressed', b.dataset.vistaFavoritos === favs.vista);
+  });
+
+  let html;
+  if (!lista.length) {
+    html = `<div class="vacio">${iconos.corazon}<p><b>Aún no tienes favoritos</b><br>Toca el corazón de un evento en la agenda para guardarlo aquí.</p><a class="btn btn--secundario" href="#/agenda">Ir a la agenda</a></div>`;
+  } else if (!visibles.length) {
+    html = `<div class="vacio">${iconos.corazon}<p>${favs.vista === 'pasados' ? 'Los eventos guardados que ya pasaron aparecen aquí.' : 'No tienes eventos próximos guardados.'}</p></div>`;
+  } else {
+    const fechas = [...new Set(visibles.map((e) => e.fecha))];
+    html = fechas.map((f) => `<h2 class="titulo-dia">${fechaLarga(f)}</h2>${visibles.filter((e) => e.fecha === f).map((e) => `
+      <div class="favorito" id="favorito-${e.id}">${tarjetaEvento(e)}${bloqueRecordatorio(e)}</div>`).join('')}`).join('');
+  }
+  document.getElementById('lista-favoritos').innerHTML = html;
+
+  const $destacado = favs.destacado && document.getElementById(`favorito-${favs.destacado}`);
+  if ($destacado) {
+    $destacado.classList.add('favorito--destacado');
+    $destacado.scrollIntoView({ block: 'center' });
+  }
+  favs.destacado = null;
+}
+
+// Aviso simulado: en la app nativa es una notificación local del sistema
+let temporizadorAviso = null;
+function mostrarAviso(ev, minutos) {
+  let $n = document.getElementById('notificacion');
+  if (!$n) {
+    $n = document.createElement('a');
+    $n.id = 'notificacion';
+    $n.className = 'notificacion';
+    $n.setAttribute('role', 'status');
+    $n.addEventListener('click', () => $n.classList.remove('notificacion--visible'));
+    document.querySelector('.telefono').append($n);
+  }
+  $n.href = `#/evento/${ev.id}`;
+  $n.innerHTML = `
+    <span class="notificacion-icono">${iconos.campana}</span>
+    <span><small>Carnaval de Negros y Blancos · ahora</small><b>${ev.nombre}</b>Empieza en ${textoAnticipacion(minutos)} · ${lugar(ev.lugar).nombre}</span>`;
+  requestAnimationFrame(() => $n.classList.add('notificacion--visible'));
+  clearTimeout(temporizadorAviso);
+  temporizadorAviso = setTimeout(() => $n.classList.remove('notificacion--visible'), 6000);
+}
+
 function noEncontrado() {
   return `<div class="vacio">${iconos.info}<p>No encontramos esta información.</p><a class="btn btn--secundario" href="#/agenda">Ir a la agenda</a></div>`;
 }
@@ -514,6 +646,7 @@ const rutas = {
   evento: { pantalla: pantallaEvento, pestaña: '#/agenda' },
   colectivo: { pantalla: pantallaColectivo, pestaña: '#/agenda' },
   mapa: { pantalla: pantallaMapa, montar: montarMapa },
+  favoritos: { pantalla: pantallaFavoritos, montar: montarFavoritos },
   informacion: { pantalla: pantallaInformacion, pestaña: '#/' },
   movilidad: { pantalla: pantallaMovilidad, montar: montarMovilidad, pestaña: '#/' }
 };
@@ -542,14 +675,37 @@ function render() {
 }
 
 $pantalla.addEventListener('click', (e) => {
-  const el = e.target.closest('[data-fav], [data-dia], [data-filtro], #limpiar, [data-recordar], [data-atras], [data-capa-mapa], [data-desfile], [data-zoom], [data-ubicacion], [data-cerrar-tarjeta], .marca, .ruta, [data-actualizar], [data-dia-movilidad]');
+  const el = e.target.closest('[data-fav], [data-dia], [data-filtro], #limpiar, [data-recordar], [data-atras], [data-capa-mapa], [data-desfile], [data-zoom], [data-ubicacion], [data-cerrar-tarjeta], .marca, .ruta, [data-actualizar], [data-dia-movilidad], [data-vista-favoritos], [data-anticipacion], [data-guardar-recordatorio], [data-editar-recordatorio], [data-probar-aviso]');
   if (!el) return;
 
   if (el.dataset.fav) {
     const id = el.dataset.fav;
-    if (favoritos.has(id)) favoritos.delete(id); else favoritos.add(id);
+    if (favoritos.has(id)) {
+      favoritos.delete(id);
+      delete recordatorios[id];
+      delete favs.edicion[id];
+      guardarRecordatorios();
+    } else favoritos.add(id);
     guardarFavoritos();
     $pantalla.querySelectorAll(`[data-fav="${id}"]`).forEach((b) => b.setAttribute('aria-pressed', favoritos.has(id)));
+    if (rutaActual === 'favoritos') montarFavoritos();
+  } else if (el.dataset.vistaFavoritos) {
+    favs.vista = el.dataset.vistaFavoritos;
+    montarFavoritos();
+  } else if (el.dataset.anticipacion) {
+    favs.edicion[el.dataset.anticipacion] = Number(el.dataset.minutos);
+    montarFavoritos();
+  } else if (el.dataset.guardarRecordatorio) {
+    const id = el.dataset.guardarRecordatorio;
+    recordatorios[id] = favs.edicion[id];
+    delete favs.edicion[id];
+    guardarRecordatorios();
+    montarFavoritos();
+  } else if (el.dataset.editarRecordatorio) {
+    favs.edicion[el.dataset.editarRecordatorio] = recordatorios[el.dataset.editarRecordatorio];
+    montarFavoritos();
+  } else if (el.dataset.probarAviso) {
+    mostrarAviso(porId(datos.eventos, el.dataset.probarAviso), recordatorios[el.dataset.probarAviso]);
   } else if (el.dataset.dia) {
     agenda.dia = el.dataset.dia;
     agenda.texto = '';
@@ -566,7 +722,7 @@ $pantalla.addEventListener('click', (e) => {
     favoritos.add(el.dataset.recordar);
     guardarFavoritos();
     $pantalla.querySelectorAll(`[data-fav="${el.dataset.recordar}"]`).forEach((b) => b.setAttribute('aria-pressed', 'true'));
-    document.getElementById('aviso-detalle').innerHTML = `<div class="aviso aviso--exito">${iconos.check}<span>Guardado en favoritos. Elige cuándo avisarte en <a href="#/favoritos">Favoritos</a>.</span></div>`;
+    document.getElementById('aviso-detalle').innerHTML = `<div class="aviso aviso--exito">${iconos.check}<span>Guardado en favoritos. Elige cuándo avisarte en <a href="#/favoritos?evento=${el.dataset.recordar}">Favoritos</a>.</span></div>`;
   } else if (el.dataset.capaMapa) {
     mapa.capas[el.dataset.capaMapa] = !mapa.capas[el.dataset.capaMapa];
     el.setAttribute('aria-pressed', mapa.capas[el.dataset.capaMapa]);
@@ -613,6 +769,18 @@ $pantalla.addEventListener('click', (e) => {
 
 $pantalla.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && e.target.classList.contains('marca')) e.target.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+});
+
+$pantalla.addEventListener('change', (e) => {
+  const id = e.target.dataset.recordatorio;
+  if (!id) return;
+  if (e.target.checked) favs.edicion[id] = 30;
+  else {
+    delete favs.edicion[id];
+    delete recordatorios[id];
+    guardarRecordatorios();
+  }
+  montarFavoritos();
 });
 
 $pantalla.addEventListener('input', (e) => {

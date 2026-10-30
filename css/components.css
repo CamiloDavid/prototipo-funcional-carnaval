@@ -272,3 +272,32 @@
 .calles { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: var(--e-3); }
 .calles span { padding: 2px var(--e-2); border-radius: var(--r-sm); background: var(--gris-suave); font-size: var(--t-xs); font-weight: 600; color: var(--tinta-2); }
 .nota { margin: var(--e-4) 0 0; font-size: var(--t-xs); color: var(--tinta-3); }
+
+/* 05 Favoritos y recordatorio */
+.vistas-favoritos { margin: var(--e-3) 0 0; }
+.favorito { margin-bottom: var(--e-3); background: var(--superficie); border-radius: var(--r-lg); box-shadow: var(--sombra-1); }
+.favorito .tarjeta-evento { margin: 0; box-shadow: none; background: none; }
+.favorito--destacado { box-shadow: 0 0 0 2px var(--amarillo), var(--sombra-1); }
+.recordatorio { display: grid; gap: var(--e-2); padding: var(--e-1) var(--e-3) var(--e-3); border-top: 1px solid var(--borde); }
+.recordatorio .interruptor b { font-size: var(--t-sm); }
+.recordatorio .interruptor small { display: block; font-size: var(--t-xs); color: var(--tinta-2); }
+.recordatorio .btn { min-height: 44px; font-size: var(--t-sm); }
+.recordatorio .fila-chips { display: grid; grid-template-columns: repeat(3, 1fr); overflow: visible; }
+.recordatorio .chip { padding: 0 var(--e-2); }
+.recordatorio .btn--texto { min-height: 36px; padding: 0; }
+.recordatorio-acciones { display: flex; justify-content: space-between; }
+.recordatorio-estado { margin: 0; padding: var(--e-2) var(--e-3) var(--e-3); border-top: 1px solid var(--borde); font-size: var(--t-sm); color: var(--tinta-3); }
+
+/* Aviso simulado del recordatorio (notificación local en la app nativa) */
+.notificacion {
+  position: absolute; z-index: 20; top: calc(env(safe-area-inset-top) + 8px); left: 8px; right: 8px;
+  display: flex; gap: var(--e-3); align-items: flex-start; padding: var(--e-3);
+  background: rgba(255, 255, 255, .97); border-radius: var(--r-lg); box-shadow: var(--sombra-2), 0 0 0 1px var(--borde);
+  color: var(--tinta); font-size: var(--t-sm); text-decoration: none;
+  transform: translateY(calc(-100% - 24px)); visibility: hidden; transition: transform .3s, visibility .3s;
+}
+.notificacion--visible { transform: none; visibility: visible; }
+.notificacion b { display: block; font-size: var(--t-md); }
+.notificacion small { display: block; color: var(--tinta-3); font-size: var(--t-xs); }
+.notificacion-icono { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--r-sm); background: var(--rojo); color: #fff; }
+.notificacion-icono svg { width: 20px; height: 20px; }

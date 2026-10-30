@@ -1,6 +1,6 @@
 // Guarda la app en el celular para usarla sin conexión (HU-08).
 // Siempre se busca primero la versión publicada, para que el celular no se quede con una anterior (HU-09).
-const CACHE = 'cnb-v3';
+const CACHE = 'cnb-v4';
 const ARCHIVOS = [
   './', 'index.html', 'manifest.webmanifest',
   'css/tokens.css', 'css/base.css', 'css/components.css',
